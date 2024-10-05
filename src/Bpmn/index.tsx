@@ -1,0 +1,106 @@
+/**
+ * @Date: 2024-10-2 14:22:25
+ * @Description: 组件入口
+ * @Author: MoJie
+ */
+import React from "react";
+import "bpmn-js/dist/assets/bpmn-js.css";
+import "bpmn-js/dist/assets/diagram-js.css";
+import BpmnModeler from 'bpmn-js/lib/Modeler';
+import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
+import { bpmnDefaultStyle, BpmnProps, xmlStr, Element } from "./props";
+import Toolbar from "./components/Toolbar";
+import './index.less';
+import PropertiesPanel from "./components/PropertiesPanel";
+import { zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu } from "./modules";
+
+/**
+ * 自定义画布组件
+ */
+export default ({ height = 60, align = 'default', bpmnStyle = bpmnDefaultStyle, ...props }: BpmnProps) => {
+
+	const containerRef = React.useRef(null);
+	const [modeler, setModeler] = React.useState<BpmnModeler>();
+	const [xml, setXml] = React.useState<string | null>(null);
+	const [defaultElement, setDefaultElement] = React.useState<Element>();
+
+	React.useEffect(() => {
+		if (!!xml && containerRef.current) {
+			const bpmn = new BpmnModeler({
+				container: containerRef.current,
+				height: `${height}vh`,
+				additionalModules: [zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu],
+				keyboard: {
+					bindTo: document
+				},
+				bpmnRenderer: {
+					defaultLabelColor: "#000",
+					defaultFillColor: '#eef4ff',
+					defaultStrokeColor: '#349afa'
+				},
+				textRenderer: {
+					defaultStyle: {
+						fontFamily: '"Inter, system-ui, Avenir, Helvetica, Arial, sans-serif"',
+						fontSize: "14px",
+						fontWeight: 400,
+						lineHeight: "20px",
+					}
+				},
+			});
+			// 定位到中间
+			bpmn.on("import.done", () => {
+				const canvas: any = bpmn.get('canvas');
+				if (align === 'center') {
+					canvas.zoom('fit-viewport', 'auto');
+				}
+				const el = canvas.getRootElement();
+				setDefaultElement(el);
+			});
+			// 装载xml
+			bpmn.importXML(xml).then(() => {
+				console.log("import xml success!")
+			}).catch((err) => console.log("import xml error: ", err))
+
+			setModeler(bpmn);
+			// 及时销毁画布
+			return () => bpmn && bpmn.destroy();
+		}
+	}, [xml]);
+
+	const loadRequest = () => {
+		if (props.request) {
+			props.request().then((res) => {
+				if (res) {
+					setXml(res);
+				} else {
+					setXml(xmlStr(props.flowKey, props.flowName, props.author));
+				}
+			});
+		}
+	}
+
+	React.useEffect(() => {
+		if (props.data || props.request) {
+			if (props.data && props.request) {
+				loadRequest();
+			} else {
+				if (props.data) {
+					setXml(props.data);
+				}
+				if (props.request) {
+					loadRequest();
+				}
+			}
+		} else {
+			setXml(xmlStr(props.flowKey, props.flowName, props.author));
+		}
+	}, []);
+
+	return <>
+		{(modeler && props.toolbarRender !== false) && (props.toolbarRender || <Toolbar {...props.toolbar} modeler={modeler} uploadXml={(xml) => setXml(xml)} />)}
+		<div id="container" ref={containerRef} style={{ width: "100%", height: "100%", position: 'relative', ...bpmnStyle }}>
+			{(modeler && defaultElement && props.panelRender !== false) &&
+				((props.panelRender && props.panelRender(modeler)) || <PropertiesPanel modeler={modeler} defaultElement={defaultElement} />)}
+		</div>
+	</>
+}
