@@ -3,7 +3,7 @@
  * @Description: 侧边属性栏
  * @Author: MoJie
  */
-import { Alert, ColorPicker, Drawer, Form, Input, InputNumber, Popover, Radio, Select, Switch, Typography } from "antd";
+import { Alert, Drawer, Form, Input, InputNumber, Popover, Radio, Select, Switch, Typography } from "antd";
 import React from "react";
 import { userType, defaultType, defaultUser, Option, MultiInstancesProperties, serviceType, scriptType } from "../props/userTask";
 import { PanelProps, Element, BusinessObjectType, nodeType, ELValidtor, multiInstancesType, elEncoder, elDecoder, spELValidtor } from "../props/panel";
@@ -54,7 +54,6 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		const node = element.businessObject;
 		// 赋值当前节点
 		nodeRef.current = node;
-		console.log(nodeRef.current);
 		const type = nodeType(node);
 		// 弹出框--备注不需要属性设置
 		if (type !== 'Process' && type !== 'Association' && type !== 'TextAnnotation') {
@@ -86,6 +85,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			if (node.script) {
 				setScript(node.script);
 			}
+            form.resetFields();
 			form.setFieldsValue({ ...node, ...flowable });
 			if (type.endsWith('Task')) {
 				setTaskType(defaultType(node, attrPrefix));
@@ -95,7 +95,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 				setMultiInstances({
 					text: multiInstancesType(node.loopCharacteristics),
 					show: true,
-					isLoop: nodeType(node.loopCharacteristics) == 'StandardLoopCharacteristics'
+					isLoop: nodeType(node.loopCharacteristics) === 'StandardLoopCharacteristics'
 				});
 			} else {
 				setMultiInstances({ show: false });
