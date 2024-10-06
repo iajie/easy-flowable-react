@@ -14,16 +14,7 @@ import {
     ZoomInOutlined,
     ZoomOutOutlined,
 } from '@ant-design/icons';
-import {
-    Button,
-    Dropdown,
-    MenuProps,
-    Modal,
-    Popover,
-    Space,
-    Typography,
-    Upload,
-} from 'antd';
+import { Button, Dropdown, MenuProps, Modal, Popover, Space, Typography, Upload } from 'antd';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
@@ -36,15 +27,9 @@ import { useSaveHotKeyFunction } from './Hooks';
 
 const { Paragraph } = Typography;
 
-const Toolbar: React.FC<ToolbarProps> = ({
-    modeler,
-    save,
-    style = {},
-    ...props
-}) => {
+const Toolbar: React.FC<ToolbarProps> = ({ modeler, save, style = {}, ...props }) => {
     const currentZoomValueRef = React.useRef<number>(1);
-    const selectItemsRef: React.MutableRefObject<Array<any> | undefined> =
-        React.useRef();
+    const selectItemsRef: React.MutableRefObject<Array<any> | undefined> = React.useRef();
     const [shortcutKeysOpen, setShortcutKeysOpen] = React.useState(false);
 
     React.useEffect(() => {
@@ -70,7 +55,9 @@ const Toolbar: React.FC<ToolbarProps> = ({
             if (xmlResult.xml) {
                 if (props.isBase64) {
                     await downloadSvg(modeler, async (str) => {
-                        await save(xmlResult.xml, str);
+                        if (xmlResult.xml) {
+                            await save(xmlResult.xml, str);
+                        }
                     });
                 } else {
                     await save(xmlResult.xml);
@@ -83,13 +70,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
         const xmlResult = await modeler.saveXML({ format: true });
         if (xmlResult.xml) {
             Modal.info({
-                title: (
-                    <Paragraph
-                        copyable={{ tooltips: false, text: xmlResult.xml }}
-                    >
-                        XML源码预览
-                    </Paragraph>
-                ),
+                title: <Paragraph copyable={{ tooltips: false, text: xmlResult.xml }}>XML源码预览</Paragraph>,
                 width: '60%',
                 footer: false,
                 closable: true,
@@ -105,9 +86,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                             scrollbarWidth: 'thin',
                         }}
                         onValueChange={() => {}}
-                        highlight={(code) =>
-                            Prism.highlight(code, Prism.languages.xml, 'xml')
-                        }
+                        highlight={(code) => Prism.highlight(code, Prism.languages.xml, 'xml')}
                     />
                 ),
             });
@@ -119,10 +98,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
      */
     function zoomIn() {
         currentZoomValueRef.current += 0.05;
-        (modeler.get('canvas') as any).zoom(
-            currentZoomValueRef.current,
-            'auto',
-        );
+        (modeler.get('canvas') as any).zoom(currentZoomValueRef.current, 'auto');
     }
 
     /**
@@ -130,10 +106,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
      */
     function zoomOut() {
         currentZoomValueRef.current -= 0.05;
-        (modeler.get('canvas') as any).zoom(
-            currentZoomValueRef.current,
-            'auto',
-        );
+        (modeler.get('canvas') as any).zoom(currentZoomValueRef.current, 'auto');
     }
 
     /**
@@ -158,18 +131,11 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 const xmlResult = await modeler.saveXML({ format: true });
                 if (xmlResult.xml) {
                     const parser = new DOMParser();
-                    const xmlDoc = parser.parseFromString(
-                        xmlResult.xml,
-                        'text/xml',
-                    );
-                    const xml = new XMLSerializer().serializeToString(
-                        xmlDoc.documentElement,
-                    );
+                    const xmlDoc = parser.parseFromString(xmlResult.xml, 'text/xml');
+                    const xml = new XMLSerializer().serializeToString(xmlDoc.documentElement);
                     const a = document.createElement('a');
                     a.download = `${props.title || 'easy-flowable'}.xml`;
-                    a.href = `data:text/xml;charset=utf-8,${encodeURIComponent(
-                        xml,
-                    )}`;
+                    a.href = `data:text/xml;charset=utf-8,${encodeURIComponent(xml)}`;
                     a.click();
                 }
             },
@@ -198,11 +164,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 width={'25%'}
                 centered
                 footer={
-                    <Button
-                        type={'primary'}
-                        key="back"
-                        onClick={() => setShortcutKeysOpen(false)}
-                    >
+                    <Button type={'primary'} key="back" onClick={() => setShortcutKeysOpen(false)}>
                         好的
                     </Button>
                 }
@@ -223,10 +185,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
             <Space>
                 <Space.Compact block>
                     <Popover content="快捷键">
-                        <Button
-                            onClick={() => setShortcutKeysOpen(true)}
-                            icon={<KeyOutlined />}
-                        />
+                        <Button onClick={() => setShortcutKeysOpen(true)} icon={<KeyOutlined />} />
                     </Popover>
                 </Space.Compact>
                 <Space.Compact block>
@@ -254,14 +213,10 @@ const Toolbar: React.FC<ToolbarProps> = ({
                                 if (file.status === 'done') {
                                     if (file.type === 'text/xml') {
                                         const reader = new FileReader();
-                                        reader.readAsText(
-                                            file.originFileObj as Blob,
-                                        );
+                                        reader.readAsText(file.originFileObj as Blob);
                                         reader.onload = (e) => {
                                             if (e.target?.result) {
-                                                props.uploadXml(
-                                                    e.target.result.toString(),
-                                                );
+                                                props.uploadXml(e.target.result.toString());
                                             }
                                         };
                                     }
@@ -272,10 +227,7 @@ const Toolbar: React.FC<ToolbarProps> = ({
                         </Upload>
                     </Popover>
                     <Popover content="预览">
-                        <Button
-                            icon={<EyeOutlined />}
-                            onClick={() => viewXml()}
-                        />
+                        <Button icon={<EyeOutlined />} onClick={() => viewXml()} />
                     </Popover>
                     <Dropdown menu={{ items }}>
                         <Button icon={<DownloadOutlined />}></Button>
@@ -283,20 +235,13 @@ const Toolbar: React.FC<ToolbarProps> = ({
                 </Space.Compact>
                 {save && (
                     <Popover content="保存更新">
-                        <Button
-                            icon={<SaveOutlined />}
-                            onClick={() => xmlSave()}
-                        />
+                        <Button icon={<SaveOutlined />} onClick={() => xmlSave()} />
                     </Popover>
                 )}
                 {props.title ? (
                     props.title
                 ) : (
-                    <Button
-                        type="link"
-                        style={{ color: 'GrayText' }}
-                        size="large"
-                    >
+                    <Button type="link" style={{ color: 'GrayText' }} size="large">
                         Easy-Flowable流程设计器
                     </Button>
                 )}

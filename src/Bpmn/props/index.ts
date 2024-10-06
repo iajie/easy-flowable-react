@@ -114,7 +114,7 @@ export interface ToolbarProps {
      */
     isBase64?: boolean;
     /** 保存方法 */
-    save?: (xml: string | undefined, base64?: string) => Promise<any>;
+    save?: (xml: string, base64?: string) => Promise<any>;
     /** 样式 */
     style?: CSSProperties;
     /** 标题 */
@@ -157,13 +157,10 @@ export const toolbarDefaultStyle: CSSProperties = {
  * @param flowKey 流程标识
  * @param flowName 流程名称
  * isExecutable：可执行的
+ * @param author
  * @returns
  */
-export const xmlStr = (
-    flowKey = 'easy-flowable-custom',
-    flowName = '流程设计器',
-    author = 'easy-flowable',
-) =>
+export const xmlStr = (flowKey = 'easy-flowable-custom', flowName = '流程设计器', author = 'easy-flowable') =>
     `<?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -204,10 +201,7 @@ export const xmlStr = (
 /**
  * 下载当前流程设计图片
  */
-export const downloadSvg = async (
-    modeler: any,
-    isBase64?: (str: string) => Promise<void>,
-) => {
+export const downloadSvg = async (modeler: any, isBase64?: (str: string) => Promise<void>) => {
     // svg字符串
     const svgResult = await modeler.saveSVG();
     // 创建画布
@@ -217,9 +211,7 @@ export const downloadSvg = async (
         context.fillStyle = '#fff';
         context.fillRect(0, 0, 10000, 10000);
         const image = new Image();
-        image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-            svgResult.svg,
-        )}`;
+        image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svgResult.svg)}`;
         image.onload = () => {
             canvas.width = image.width + 100;
             canvas.height = image.height + 200;
@@ -244,5 +236,4 @@ export const downloadSvg = async (
             };
         };
     }
-    return '';
 };
