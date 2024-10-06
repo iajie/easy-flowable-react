@@ -1,6 +1,6 @@
 {
     "name": "easy-flowable-react",
-    "version": "0.0.1",
+    "version": "0.0.4",
     "description": "快速搭建属于自己的流程引擎",
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
