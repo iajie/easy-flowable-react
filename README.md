@@ -1,4 +1,4 @@
-# easy-flowable-bpmn
+# easy-flowable-react
 
 [![NPM version](https://img.shields.io/npm/v/easy-flowable-bpmn.svg?style=flat)](https://npmjs.org/package/easy-flowable-bpmn)
 [![NPM downloads](http://img.shields.io/npm/dm/easy-flowable-bpmn.svg?style=flat)](https://npmjs.org/package/easy-flowable-bpmn)
@@ -17,27 +17,16 @@ TODO
 
 ```bash
 # install dependencies
-$ npm install
-
-# develop library by docs demo
-$ npm start
-
-# build library source code
-$ npm run build
-
-# build library source code in watch mode
-$ npm run build:watch
-
-# build docs
-$ npm run docs:build
-
-# Locally preview the production build.
-$ npm run docs:preview
-
-# check your project for potential problems
-$ npm run doctor
+$ npm install easy-flowable-react
 ```
 
+```js
+import { EasyFlowable } from "easy-flowable-react";
+
+export default () => {
+    return <EasyFlowable height={90} bpmnStyle={{ height: '95%' }} data={state.dataInfo.modelEditorXml} />
+}
+```
 ## LICENSE
 
 MIT
