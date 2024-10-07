@@ -44,7 +44,7 @@ export interface BpmnProps {
         /**
          * @description 保存方法
          */
-        save?: (xml: string, base64?: string) => Promise<void>;
+        save?: (data: SaveProps) => Promise<void>;
         /**
          * @description 样式
          */
@@ -102,6 +102,29 @@ export interface BpmnProps {
     author?: string;
 }
 
+interface SaveProps {
+    /**
+     * @description 设计器数据
+     */
+    xml: string;
+    /**
+     * @description 设计器缩略图
+     */
+    base64?: string;
+    /**
+     * @description 模型名称
+     */
+    name?: string;
+    /**
+     * @description 模型描述
+     */
+    description?: string;
+    /**
+     * @description 模型作者
+     */
+    author?: string;
+}
+
 export interface ToolbarProps {
     /**
      * @description 导入的xml
@@ -114,11 +137,15 @@ export interface ToolbarProps {
      */
     isBase64?: boolean;
     /** 保存方法 */
-    save?: (xml: string, base64?: string) => Promise<any>;
+    save?: (data: SaveProps) => Promise<any>;
     /** 样式 */
     style?: CSSProperties;
     /** 标题 */
     title?: ReactNode | false;
+    /**
+     * bpmn模型信息
+     */
+    bpmnData?: SaveProps;
 }
 
 export type Element = import('bpmn-js/lib/model/Types').Element & {
@@ -201,7 +228,7 @@ export const xmlStr = (flowKey = 'easy-flowable-custom', flowName = '流程设�
 /**
  * 下载当前流程设计图片
  */
-export const downloadSvg = async (modeler: any, isBase64?: (str: string) => Promise<void>) => {
+export const downloadSvg = async (modeler: any, isBase64?: (str: string) => void) => {
     // svg字符串
     const svgResult = await modeler.saveSVG();
     // 创建画布

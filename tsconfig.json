@@ -8,8 +8,8 @@
     "baseUrl": "./",
     "paths": {
       "@@/*": [".dumi/tmp/*"],
-      "easy-flowable/react": ["src"],
-      "easy-flowable/react/*": ["src/*", "*"]
+      "easy-flowable-react": ["src"],
+      "easy-flowable-react/*": ["src/*", "*"]
     }
   },
   "include": [".dumirc.ts", "src/**/*"]

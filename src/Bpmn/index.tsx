@@ -20,6 +20,7 @@ import { zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu } from
 export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: BpmnProps) => {
 
     const containerRef = React.useRef(null);
+    const [bpmnData, setBpmnData] = React.useState<any>();
     const [modeler, setModeler] = React.useState<BpmnModeler>();
     const [xml, setXml] = React.useState<string | null>(null);
     const [defaultElement, setDefaultElement] = React.useState<Element>();
@@ -97,10 +98,10 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
     }, []);
 
     return <>
-        {(modeler && props.toolbarRender !== false) && (props.toolbarRender || <Toolbar {...props.toolbar} modeler={modeler} uploadXml={(xml) => setXml(xml)} />)}
+        {(modeler && props.toolbarRender !== false) && (props.toolbarRender || <Toolbar {...props.toolbar} modeler={modeler} bpmnData={bpmnData} uploadXml={(xml) => setXml(xml)} />)}
         <div id="container" ref={containerRef} style={{ width: "100%", height: "95%", position: 'relative', ...bpmnDefaultStyle, ...bpmnStyle }}>
             {(modeler && defaultElement && props.panelRender !== false) &&
-                ((props.panelRender && props.panelRender(modeler)) || <PropertiesPanel modeler={modeler} defaultElement={defaultElement} />)}
+                ((props.panelRender && props.panelRender(modeler)) || <PropertiesPanel modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
         </div>
     </>
 }

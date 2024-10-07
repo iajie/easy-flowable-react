@@ -12,6 +12,10 @@ export type BusinessObjectType = {
     id: string,
     name: string,
     description: string;
+    /**
+     * @description 作者
+     */
+    author: string;
     color: Color,
     /** 条件表达式 */
     conditionExpression: {
@@ -89,6 +93,11 @@ export interface PanelProps {
     style?: CSSProperties;
     /** 抽屉宽度  */
     width?: number;
+    /**
+     * @description bpmn信息，存在流程模型信息编辑
+     * @param data 返回参数
+     */
+    bpmnInfo: (data: any) => void;
     /** 用户列表 */
     users?: () => Promise<Option[]> | Option[];
     /** 候选组列表，可以是角色、部门... */
@@ -97,8 +106,8 @@ export interface PanelProps {
 
 /**
  * 获取节点类型
- * @param type 节点type
- * @returns 
+ * @returns
+ * @param node
  */
 export const nodeType = (node: any) => {
     if (node && node.$type) {
@@ -112,8 +121,8 @@ export const nodeType = (node: any) => {
 
 /**
  * 获取多实例类型
- * @param type 节点type
- * @returns 
+ * @returns
+ * @param node
  */
 export const multiInstancesType = (node: BusinessObjectType['loopCharacteristics']) => {
     const type = nodeType(node);
@@ -128,14 +137,13 @@ export const multiInstancesType = (node: BusinessObjectType['loopCharacteristics
 
 /**
  * SpEl参数校验
- * @param _ 
+ * @param _
  * @param value 校验
  */
 export const spELValidtor = (value: string) => value && value.startsWith('${') && value.endsWith('}')
 
 /**
  * SpEl参数校验
- * @param _ 
  * @param value 校验
  */
 export const ELValidtor = async (value?: string) => {

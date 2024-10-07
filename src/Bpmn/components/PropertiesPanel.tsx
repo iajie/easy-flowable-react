@@ -26,6 +26,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 	const modeling: Modeling = modeler.get('modeling');
 
 	const [form] = Form.useForm();
+    const [bpmnData, setBpmnData] = React.useState<any>();
 	const ignoreElementChanged = React.useRef(false);
 	const [open, setOpen] = React.useState<boolean>(false);
 	const nodeRef = React.useRef<BusinessObjectType>();
@@ -48,15 +49,13 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 	/**                        用户任务属性                                    **/
 
 	const changeCurrentElement = (element: Element) => {
-		// 设置当前选择元素
-		setCurrentElement(element);
 		// 获取元素节点信息
 		const node = element.businessObject;
 		// 赋值当前节点
 		nodeRef.current = node;
 		const type = nodeType(node);
 		// 弹出框--备注不需要属性设置
-		if (type !== 'Process' && type !== 'Association' && type !== 'TextAnnotation') {
+		if (type !== 'Association' && type !== 'TextAnnotation') {
 			// 节点下多余属性
 			const attrs = node.$attrs;
 			const flowable: any = {};
@@ -104,6 +103,8 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		} else {
 			setOpen(false);
 		}
+        // 设置当前选择元素
+        setCurrentElement(element);
 	}
 
 	/**
@@ -143,6 +144,9 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		}
 		if (changeValue.description) {
 			updateElementProperty('description', changeValue.description);
+		}
+		if (changeValue.author) {
+			updateElementProperty('author', changeValue.author);
 		}
 		if (changeValue.color) {
 			modeling.setColor([currentElement], { stroke: changeValue?.color.toHexString() });
@@ -262,6 +266,11 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 				if (forBusinessObjectAttrs) {
 					currentElement.businessObject.$attrs[attrPrefix + property] = value;
 				} else {
+                    if (nodeType(currentElement.businessObject) == 'Process') {
+                        setBpmnData({ ...bpmnData, [property]: value });
+                        // 返回信息
+                        props.bpmnInfo({ ...bpmnData, [property]: value });
+                    }
 					if (property.endsWith('assignee')) {
 						delete currentElement.businessObject.$attrs[`${attrPrefix}candidateUsers`];
 						delete currentElement.businessObject.$attrs[`${attrPrefix}candidateGroups`];
@@ -348,12 +357,9 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			<Form.Item label="名称" name="name">
 				<Input />
 			</Form.Item>
-			<Form.Item label="描述" name="description">
-				<TextArea />
-			</Form.Item>
-			{/* <Form.Item label="颜色" name="color">
-				<ColorPicker />
-			</Form.Item> */}
+            {nodeType(nodeRef.current) === 'Process' && <Form.Item label="作者" name="author">
+                <Input />
+            </Form.Item>}
 			{nodeType(nodeRef.current) === 'SequenceFlow' && <Form.Item
 				label="表达式" name={['conditionExpression', 'body']} tooltip="条件表达式为EL表达式，结果需为true/false"
 				rules={[{ validator: (_, value) => ELValidtor(value) }]}>
@@ -466,6 +472,9 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 					<Input addonAfter="返回值" />
 				</Form.Item>}
 			</Form.Item>}
+            <Form.Item label="描述" name="description">
+                <TextArea />
+            </Form.Item>
 		</Form>
 	</Drawer>
 }

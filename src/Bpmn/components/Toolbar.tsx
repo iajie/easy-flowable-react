@@ -51,17 +51,14 @@ const Toolbar: React.FC<ToolbarProps> = ({ modeler, save, style = {}, ...props }
     const xmlSave = async () => {
         if (save) {
             const xmlResult = await modeler.saveXML({ format: true });
+            const data: any = { ...props.bpmnData };
             // 更新流程信息
             if (xmlResult.xml) {
+                data.xml = xmlResult.xml;
                 if (props.isBase64) {
-                    await downloadSvg(modeler, async (str) => {
-                        if (xmlResult.xml) {
-                            await save(xmlResult.xml, str);
-                        }
-                    });
-                } else {
-                    await save(xmlResult.xml);
+                    await downloadSvg(modeler, (str) => data.base64 = str);
                 }
+                await save(data);
             }
         }
     };
