@@ -1,6 +1,6 @@
 {
     "name": "easy-flowable-react",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "description": "快速搭建属于自己的流程引擎",
     "license": "MIT",
     "module": "dist/index.js",
