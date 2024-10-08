@@ -7,6 +7,7 @@ const zhConfigs = {
     // 左侧工具栏
     'Activate hand tool': '激活抓手工具',
     'Activate lasso tool': '激活套索工具',
+    'Activate global connect tool': '全局节点连接工具',
     'Activate create/remove space tool': '激活创建/删除空间工具',
     'Create start event': '创建开始事件',
     'Create end event': '创建结束事件',
