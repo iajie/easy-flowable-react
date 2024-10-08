@@ -12,7 +12,7 @@ export default defineConfig({
 	themeConfig: {
 		// 源码链接
 		socialLinks: {
-			github: 'https://gitee.com/iajie/easy-flowable.git'
+			github: 'https://github.com/iajie/easy-flowable.git'
 		},
 		// 显示代码行号
 		showLineNum: true,

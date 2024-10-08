@@ -1,6 +1,6 @@
 ---
 title: 任务类型
-order: 4
+order: 7
 toc: content
 ---
 

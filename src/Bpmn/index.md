@@ -7,14 +7,8 @@ toc: content
 ## EasyFlowable 流程设计器
 > `EasyFlowable`是基于 `Ant Design` + `bpmn.js` 而开发的流程设计器组件，提供了更高级别的组合支持，开箱即用。可以显著地提升流程设计整合进度，更加专注于业务。
 
-
-## 代码示例
-
-<code src="./demo/basic.tsx" title="基础使用"></code>
-
 ## API
 <Badge type="warning">所有以 Render 为后缀的方法都可以通过传入 false 来使其不渲染。</Badge>
-
 |            属性名          |               描述               |    类型    |         默认值              |
 |--------------------------------------------------------|---------------------------------|------------|-----------------------------|
 | data | 画布字符串 | string | - |
@@ -32,15 +26,16 @@ toc: content
 | author | 流程作者 | `string` | - |
 
 ### ToolbarProps
-顶部工具栏
+<Badge type="warning">顶部工具栏</Badge>
 |            参数          |               说明               |    类型    |         默认值              |
 |-------------------------|---------------------------------|------------|-----------------------------|
-| save | 保存方法，会作用与Ctrl+S | `(xml: string) => Promise<void>` | - |
+| save | 保存方法，会作用与Ctrl+S | `(data: SaveProps) => Promise<void>`[SaveProps](#saveprops) | - |
+| isBase64 | 是否保存base64信息 | `boolean` | `false` |
 | style | 设计器顶部工具栏样式 | `CSSProperties` | - |
 | title | 设计器标题(顶部文字) | `dom` | `Easy-Flowable流程设计器` |
 
 ### PanelProps 
-属性操作面板
+<Badge type="warning">属性操作面板</Badge>
 |            参数          |               说明               |    类型    |         默认值              |
 |-------------------------|---------------------------------|------------|-----------------------------|
 | attrPrefix | 节点前缀，可适配activty | `string` | `flowable:` |
@@ -49,8 +44,18 @@ toc: content
 | users | 用户列表(用户自定义) | `option[]` 丨 `() => Promise<option[]>` | - |
 | groups | 候选组(可以是角色、部门...) | `option[]` 丨 `() => Promise<option[]>` | - |
 
+### SaveProps
+<Badge type="warning">保存参数</Badge>
+|            参数          |               说明               |    类型    |
+|-------------------------|---------------------------------|------------|
+| xml | 设计器数据 | `string` |
+| base64 | 设计器缩略图base64编码，默认不会返回， | `string` |
+| name | 流程模型名称，当编辑设计器基础面板信息后会返回 | `string` |
+| description | 设计器描述，当编辑设计器基础面板信息后会返回 | `string` |
+| author | 流程作者, 当编辑设计器基础面板信息后会返回 | `string` |
+
 ### option
-列表属性
+<Badge type="warning">列表属性</Badge>
 |            参数          |               说明               |    类型    |
 |-------------------------|---------------------------------|------------|
 | label | 列表显示值 | `string` |
