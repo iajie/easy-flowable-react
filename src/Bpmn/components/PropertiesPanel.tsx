@@ -305,9 +305,9 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			// 如果是数组
 			if (props.users instanceof Array) {
 				setUsers(defaultUser.concat(props.users));
-			} else if (props.users instanceof Promise) {
+			} else if (typeof props.users() === 'object' && typeof props.users().then === 'function') {
 				setUsersLoading(true);
-				props.users.then((res) => {
+				props.users().then((res) => {
 					setUsersLoading(false);
 					if (res && res.length) {
 						setUsers(defaultUser.concat(res));
@@ -328,9 +328,9 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			// 如果是数组
 			if (props.groups instanceof Array) {
 				setGroups(props.groups);
-			} else if (props.groups instanceof Promise) {
+			} else if (typeof props.groups() === 'object' && typeof props.groups().then === 'function') {
 				setGroupsLoading(true);
-				props.groups.then((res) => {
+				props.groups().then((res) => {
 					setGroupsLoading(false);
 					if (res && res.length) {
 						setGroups(res);

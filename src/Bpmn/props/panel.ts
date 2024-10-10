@@ -39,14 +39,12 @@ export type BusinessObjectType = {
     },
     $type: string,
     $attrs: any,
-
     /** 操作人 */
     assignee: string;
     /** 候选人 */
     candidateUsers: string[];
     /** 候选组 */
     candidateGroups: string;
-
     /**
      * @description 服务类全名，需要execute(DelegateExecution e)方法，也可以实现JavaDelegate
      */
@@ -99,9 +97,9 @@ export interface PanelProps {
      */
     bpmnInfo: (data: any) => void;
     /** 用户列表 */
-    users?: () => Promise<Option[]> | Option[];
+    users?: Option[] | (() => Promise<Option[]>);
     /** 候选组列表，可以是角色、部门... */
-    groups?: () => Promise<Option[]> | Option[];
+    groups?: Option[] | (() => Promise<Option[]>);
 }
 
 /**

@@ -79,9 +79,9 @@ export interface BpmnProps {
          */
         width?: number;
         /** 用户列表 */
-        users?: () => Promise<Option[]> | Option[];
+        users?: Option[] | (() => Promise<Option[]>);
         /** 候选组列表，可以是角色、部门... */
-        groups?: () => Promise<Option[]> | Option[];
+        groups?: Option[] | (() => Promise<Option[]>);
     };
     /**
      * @description 自定义属性面板 @param modeler 设计器实例
