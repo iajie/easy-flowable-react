@@ -49,18 +49,16 @@ export default () => {
         ];
     }
 
-    return (
-        <EasyFlowable
-            panel={{
-                users,
-                groups,
-            }}
-            toolbar={{
-                save: async (data) => {
-                    console.log(data);
-                },
-                isBase64: true
-            }}
-        />
-    );
+    return <EasyFlowable
+        panel={{
+            users,
+            groups,
+        }}
+        toolbar={{
+            save: async (data) => {
+                console.log(data);
+            },
+            isBase64: true
+        }}
+    />;
 };
