@@ -1,5 +1,6 @@
 ---
 title: '快速开始'
+toc: content
 nav:
   title: 使用指南
   order: 0
@@ -7,36 +8,44 @@ nav:
 在开始之前，我们假定您已经：
 - 熟悉 Java 环境配置及其开发
 - 熟悉SpringBoot开发
-- 如果你想自定义前端画布组件
+- 想自定义前端画布组件
 # Easy-Flowable
 
 `Easy-Flowable`，是一款基于 `flowable` 进行二次封装拓展出模型等操作接口的流程引擎工具。
-目前开发项目有：
-- easy-flowable-boot-starter SpringBoot快速集成
-- easy-flowable-solon-plugin Solon快速集成
-- easy-flowable-ui-designer  页面操作
-- easy-flowable-bpmn         自定义前端流程设计器
 
 ## 快速上手
-### 1.SpringBoot集成
+### 1、SpringBoot集成
 ```xml
-<dependencies>
-    <dependency>
-        <groupId>com.superb</groupId>
-        <artifactId>easy-flowable-boot-starter</artifactId>
-        <version>${last.version}</version>
-    </dependency>
-    <!-- UI 可视化界面 -->
-    <dependency>
-        <groupId>com.superb</groupId>
-        <artifactId>easy-flowable-ui-designer</artifactId>
-        <version>${last.version}</version>
-    </dependency>
-</dependencies>
+<dependency>
+    <groupId>com.easy-flowable</groupId>
+    <artifactId>easy-flowable-boot-starter</artifactId>
+    <version>${last.version}</version>
+</dependency>
 ```
 
+### 2、如果你想要Easy-Flowable的控制台
+启动后访问`http://127.0.0.1:port/easy-flowable`
+```xml
+<!-- UI 可视化界面 -->
+<dependency>
+    <groupId>com.easy-flowable</groupId>
+    <artifactId>easy-flowable-ui-designer</artifactId>
+    <version>${last.version}</version>
+</dependency>
+```
 
-### 2、相关配置
+### 3、Solon集成
+> 暂未支持ui可视化
+
+```xml
+<dependency>
+    <groupId>com.easy-flowable</groupId>
+    <artifactId>easy-flowable-solon-plugin</artifactId>
+    <version>${last.version}</version>
+</dependency>
+```
+
+### 4、相关配置
 
 ```yaml
 easy-flowable:
@@ -68,7 +77,7 @@ easy-flowable:
   config:
     # 构建引擎时，检查并在需要时更新表结构。表结构不存在则会创建
     table-schema: true
-    # 定时任务开关job
+    # 异步任务开关job
     async-executor-activate: false
     # 流程历史级别:将存档所有流程实例及活动实例，并保持变量值与提交的表单参数的同步，以保证所有通过表单进行的用户操作都可追踪、可审计
     history-level: audit
@@ -90,8 +99,4 @@ easy-flowable:
         useSSL: false
         # 是否开启TLS通信
         use-tls: false
-
 ```
-
-### 3.启动项目后访问
-`http://127.0.0.1:port/easy-flowable`
