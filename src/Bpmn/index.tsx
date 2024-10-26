@@ -98,9 +98,10 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
     }, []);
 
     return <div style={{ width: "100%", position: 'relative' }}>
-        {(modeler && props.toolbarRender !== false) && (props.toolbarRender || <Toolbar {...props.toolbar} modeler={modeler} bpmnData={bpmnData} uploadXml={(xml) => setXml(xml)} />)}
+        {(modeler && props.toolbarRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
+            <Toolbar {...props.toolbar} modeler={modeler} bpmnData={bpmnData} uploadXml={(xml) => setXml(xml)} />)}
         <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }}/>
-        {(modeler && defaultElement && props.panelRender !== false) &&
-            ((props.panelRender && props.panelRender(modeler)) || <PropertiesPanel { ...props.panel } modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
+        {(modeler && defaultElement && props.panelRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
+                <PropertiesPanel { ...props.panel } modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
     </div>
 }
