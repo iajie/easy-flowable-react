@@ -157,10 +157,13 @@ class EasyFlowablePopupMenuProvider {
 
     /**
      * 多实例面板头部
-     * @param target 
-     * @returns 
+     * @param target
+     * @returns
      */
     getLoopCharacteristicsHeaderEntries = (target: Element) => {
+        if (target.type !== 'bpmn:UserTask') {
+            return {};
+        }
         const toggleLoopEntry = (event: any, entry: Element) => {
             // remove
             if (entry.active) {
