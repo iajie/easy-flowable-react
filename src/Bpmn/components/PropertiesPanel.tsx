@@ -85,7 +85,6 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 				setScript(node.script);
 			}
             form.resetFields();
-            console.log(node, flowable)
 			form.setFieldsValue({ ...node, ...flowable });
 			if (type.endsWith('Task')) {
 				setTaskType(defaultType(node, attrPrefix));
