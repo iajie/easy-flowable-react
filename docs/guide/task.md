@@ -1,12 +1,9 @@
 ---
-title: 任务类型
-order: 7
+title: 任务类型(Task)
 toc: content
 ---
 
-
-## 任务类型(Task)
-### 用户任务(UserTask)
+## 用户任务(UserTask)
 <Badge type="info">用户任务只的是改节点需要人工审批</Badge>
 |            参数          |               说明               |
 |--------------------------------------------------------|---------------------------------|
@@ -47,11 +44,11 @@ toc: content
 执行顺序按照流程图顺序执行，全部执行完成后结束
 :::
 ![sequential](./image/loop.png)
-### 服务任务
+## 服务任务
 :::info{title=多实例模式循环}
 执行一个任务n次，达到执行次数后结束循环,需要设置参数loopCharacteristics.loopCardinality为需要循环的次数
 :::
 ![sequential](./image/loop_1.png)
-### 服务任务
-### 邮件任务
-### 脚本任务
+## 服务任务
+## 邮件任务
+## 脚本任务
