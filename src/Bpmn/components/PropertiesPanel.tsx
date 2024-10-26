@@ -63,7 +63,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 				if (Object.prototype.hasOwnProperty.call(attrs, key)) {
 					if (key.startsWith(attrPrefix)) {
 						// 获取表单key
-						const keyProps = key.substring(key.indexOf(attrPrefix) + 1);
+						const keyProps = key.substring(attrPrefix?.length);
 						flowable[keyProps] = attrs[key];
 					} else {
 						flowable[key] = attrs[key];
@@ -85,6 +85,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 				setScript(node.script);
 			}
             form.resetFields();
+            console.log(node, flowable)
 			form.setFieldsValue({ ...node, ...flowable });
 			if (type.endsWith('Task')) {
 				setTaskType(defaultType(node, attrPrefix));
