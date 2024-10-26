@@ -184,10 +184,9 @@ export const toolbarDefaultStyle: CSSProperties = {
  * @param flowKey 流程标识
  * @param flowName 流程名称
  * isExecutable：可执行的
- * @param author
  * @returns
  */
-export const xmlStr = (flowKey = 'easy-flowable-custom', flowName = '流程设计器', author = 'easy-flowable') =>
+export const xmlStr = (flowKey = 'easy-flowable-custom', flowName = '流程设计器') =>
     `<?xml version="1.0" encoding="UTF-8"?>
 <definitions id="definitions" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -197,7 +196,7 @@ export const xmlStr = (flowKey = 'easy-flowable-custom', flowName = '流程设�
     typeLanguage="http://www.w3.org/2001/XMLSchema"
     expressionLanguage="http://www.w3.org/1999/XPath"
     targetNamespace="http://www.flowable.org/processdef">
-<process id="${flowKey}" name="${flowName}" isExecutable="true" author="${author}">
+<process id="${flowKey}" name="${flowName}" isExecutable="true">
     <startEvent id="StartEvent_1y45yut" name="开始">
     <outgoing>SequenceFlow_0h21x7r</outgoing>
     </startEvent>

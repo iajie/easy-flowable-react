@@ -135,7 +135,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		}
 	}, [modeler]);
 
-	const onVlauesChange = (changeValue: Partial<BusinessObjectType>) => {
+	const onValuesChange = (changeValue: Partial<BusinessObjectType>) => {
 		if (changeValue.id) {
 			updateElementProperty('id', changeValue.id);
 		}
@@ -143,7 +143,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			updateElementProperty('name', changeValue.name);
 		}
 		if (changeValue.description) {
-			updateElementProperty('description', changeValue.description);
+			updateElementProperty(attrPrefix + 'description', changeValue.description);
 		}
 		if (changeValue.author) {
 			updateElementProperty('author', changeValue.author);
@@ -350,7 +350,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		getContainer={false}
 		onClose={() => setOpen(false)}
 		title={<Alert message={`当前对象: ${nodeType(nodeRef.current)}`} />}>
-		<Form onValuesChange={onVlauesChange} form={form} labelCol={{ span: 5 }}>
+		<Form onValuesChange={onValuesChange} form={form} labelCol={{ span: 5 }}>
 			<Form.Item label="标识" name="id">
 				<Input readOnly />
 			</Form.Item>
