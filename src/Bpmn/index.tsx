@@ -74,7 +74,7 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
                 if (res) {
                     setXml(res);
                 } else {
-                    setXml(xmlStr(props.flowKey, props.flowName, props.author));
+                    setXml(xmlStr(props.flowKey, props.flowName));
                 }
             });
         }
@@ -93,7 +93,7 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
                 }
             }
         } else {
-            setXml(xmlStr(props.flowKey, props.flowName, props.author));
+            setXml(xmlStr(props.flowKey, props.flowName));
         }
     }, []);
 

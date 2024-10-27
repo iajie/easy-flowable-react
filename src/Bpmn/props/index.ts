@@ -95,11 +95,6 @@ export interface BpmnProps {
      * @description 流程名称：流程部署后显示的信息
      */
     flowName?: string;
-    /**
-     * @description 流程作者
-     * @default easy-flowable
-     */
-    author?: string;
 }
 
 interface SaveProps {
@@ -119,10 +114,6 @@ interface SaveProps {
      * @description 模型描述
      */
     description?: string;
-    /**
-     * @description 模型作者
-     */
-    author?: string;
 }
 
 export interface ToolbarProps {

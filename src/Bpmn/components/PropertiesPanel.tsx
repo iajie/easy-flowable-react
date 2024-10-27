@@ -367,9 +367,6 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			<Form.Item label="名称" name="name">
 				<Input />
 			</Form.Item>
-            {nodeType(nodeRef.current) === 'Process' && <Form.Item label="作者" name="author">
-                <Input />
-            </Form.Item>}
 			{nodeType(nodeRef.current) === 'SequenceFlow' && <Form.Item
 				label="表达式" name={['conditionExpression', 'body']} tooltip="条件表达式为EL表达式，结果需为true/false"
 				rules={[{ validator: (_, value) => ELValidtor(value) }]}>
