@@ -6,7 +6,7 @@
 import { Alert, Drawer, Form, Input, InputNumber, Popover, Radio, Select, Switch, Typography } from "antd";
 import React from "react";
 import { userType, defaultType, defaultUser, Option, MultiInstancesProperties, serviceType, scriptType } from "../props/userTask";
-import { PanelProps, Element, BusinessObjectType, nodeType, ELValidtor, multiInstancesType, elEncoder, elDecoder, spELValidtor } from "../props/panel";
+import { PanelProps, Element, BusinessObjectType, nodeType, ELValidtor, multiInstancesType, spELValidtor } from "../props/panel";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
@@ -69,9 +69,6 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 						flowable[key] = attrs[key];
 					}
 				}
-			}
-			if (node?.conditionExpression && node.conditionExpression?.body) {
-				node.conditionExpression.body = elDecoder(node.conditionExpression.body);
 			}
 			// 多实例
 			const loop = node.loopCharacteristics && node.loopCharacteristics.$attrs;
@@ -167,7 +164,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		if (conditionExpression && spELValidtor(conditionExpression)) {
 			const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
 			const expression = bpmnFactory.create("bpmn:FormalExpression")
-			expression.body = elEncoder(conditionExpression);
+			expression.body = conditionExpression;
 			updateElementProperty("conditionExpression", expression);
 		}
 		// 用户

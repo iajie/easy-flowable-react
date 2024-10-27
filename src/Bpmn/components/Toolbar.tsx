@@ -61,7 +61,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ modeler, save, style = {}, ...props }
                 await save(data);
             }
         }
-    };
+    }
 
     const viewXml = async () => {
         const xmlResult = await modeler.saveXML({ format: true });
@@ -88,7 +88,7 @@ const Toolbar: React.FC<ToolbarProps> = ({ modeler, save, style = {}, ...props }
                 ),
             });
         }
-    };
+    }
 
     /**
      * 放大
