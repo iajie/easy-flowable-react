@@ -84,6 +84,16 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			if (node.script) {
 				setScript(node.script);
 			}
+
+            // begin author: MoJie Date: 2024-10-27 16:37:11 for: 解决候选用户和候选组回显问题
+            if (flowable.candidateUsers && !Array.isArray(flowable.candidateUsers)) {
+                flowable.candidateUsers = flowable.candidateUsers.split(',');
+            }
+            if (flowable.candidateGroups && !Array.isArray(flowable.candidateGroups)) {
+                flowable.candidateGroups = flowable.candidateGroups.split(',');
+            }
+            // end author: MoJie Date: 2024-10-27 16:38:05
+
             form.resetFields();
 			form.setFieldsValue({ ...node, ...flowable });
 			if (type.endsWith('Task')) {
