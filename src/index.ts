@@ -4,3 +4,4 @@
  * @Author: MoJie
  */
 export { default as EasyFlowable } from './Bpmn';
+export { default as EasyFlowableViewer } from './Viewer';

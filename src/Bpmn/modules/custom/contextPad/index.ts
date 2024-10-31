@@ -8,15 +8,15 @@ import {
 } from 'bpmn-js/lib/features/context-pad/ContextPadProvider';
 
 class EasyFlowableContextPadProvider {
-    private contextPad: any;
-    private modeling: any;
-    private elementFactory: ElementFactory;
-    private connect: any;
-    private create: any;
-    private popupMenu: any;
-    private rules: any;
-    private translate: any;
-    private appendPreview: any;
+    contextPad: any;
+    modeling: any;
+    elementFactory: ElementFactory;
+    connect: any;
+    create: any;
+    popupMenu: any;
+    rules: any;
+    translate: any;
+    appendPreview: any;
     autoPlace: any;
 
     constructor(config: ContextPadConfig, injector: Injector, eventBus: EventBus, contextPad: ContextPad, modeling: ContextPad, elementFactory: ElementFactory,
@@ -59,7 +59,7 @@ class EasyFlowableContextPadProvider {
     /**
      * 追加删除节点
      * @param elements 节点集合
-     * @returns 
+     * @returns
      */
     getMultiElementContextPadEntries = (elements: Element[]) => {
         const actions = {};
@@ -83,7 +83,7 @@ class EasyFlowableContextPadProvider {
     /**
      * 判断是否允许删除节点
      * @param elements 节点集合
-     * @returns 
+     * @returns
      */
     isDeleteAllowed = (elements: Element[]) => {
         const baseAllowed = this.rules.allowed('elements.delete', {
@@ -98,7 +98,7 @@ class EasyFlowableContextPadProvider {
     /**
      * 获取操作面板
      * @param element 得到modeler的节点
-     * @returns 
+     * @returns
      */
     getContextPadEntries = (element: Element) => {
         // 面板操作
@@ -148,7 +148,7 @@ class EasyFlowableContextPadProvider {
          * @param className 图标
          * @param title 显示名称
          * @param options 配置(点击事件...)
-         * @returns 
+         * @returns
          */
         const appendAction = (type: string, className: string, title: Translate, options?: any) => {
             const appendStart = (e: any, el: Element) => {
@@ -270,7 +270,7 @@ class EasyFlowableContextPadProvider {
                     'append.end-event': appendAction('bpmn:EndEvent', 'bpmn-icon-end-event-none', this.translate('Append end event')),
                     'append.gateway': appendAction('bpmn:ExclusiveGateway', 'bpmn-icon-gateway-none', this.translate('Append gateway')),
                     'append.append-task': appendAction('bpmn:Task', 'bpmn-icon-task', this.translate('Append task')),
-                    // TODO 邮件 
+                    // TODO 邮件
                     // 'append.append-mail-task': appendAction('bpmn:Task', 'bpmn-icon-send', this.translate('Append mail task')),
                     'append.intermediate-event': appendAction('bpmn:IntermediateThrowEvent',
                         'bpmn-icon-intermediate-event-none', this.translate('Append intermediate/boundary event'))
@@ -376,7 +376,7 @@ class EasyFlowableContextPadProvider {
      * @param businessObject 节点对象
      * @param type 类型
      * @param eventDefinitionType 目标类型
-     * @returns 
+     * @returns
      */
     isEventType = (businessObject: ModdleElement, type: string, eventDefinitionType: string) => {
         const isType = businessObject.$instanceOf(type);

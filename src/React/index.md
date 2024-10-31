@@ -9,7 +9,8 @@ npm install easy-flowable-react
 ```
 
 ## 代码示例
-<code src="./demo/basic.tsx"></code>
+<code src="./demo/designer.tsx">设计器组件</code>
+<code src="./demo/viewer.tsx">流程图组件</code>
 
 
 ## 配置
