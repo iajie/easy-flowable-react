@@ -1,4 +1,3 @@
-import { assign } from 'min-dash';
 import {
     Palette, Create, ElementFactory, SpaceTool, LassoTool,
     HandTool, GlobalConnect, Translate
@@ -33,7 +32,7 @@ class EasyFlowablePaletteProvider {
         const actions: any = {};
         const createAction = (type: any, group: any, className: any, title: any, options?: any) => {
             const createListener = (event: any) => {
-                const shape = this.elementFactory.createShape(assign({ type: type }, options));
+                const shape = this.elementFactory.createShape(Object.assign({ type: type }, options));
                 if (options) {
                     shape.businessObject.di.isExpanded = options.isExpanded;
                 }
@@ -77,7 +76,7 @@ class EasyFlowablePaletteProvider {
             // @ts-ignore
             this.create.start(event, this.elementFactory.createParticipantShape());
         }
-        assign(actions, {
+        Object.assign(actions, {
             'hand-tool': {//抓手工具
                 group: 'tools',
                 className: 'bpmn-icon-hand-tool',

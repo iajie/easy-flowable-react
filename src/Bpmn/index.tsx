@@ -4,13 +4,13 @@
  * @Author: MoJie
  */
 import React from "react";
+import './props/index.less';
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/diagram-js.css";
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 import { bpmnDefaultStyle, BpmnProps, xmlStr, Element } from "./props";
 import Toolbar from "./components/Toolbar";
-import './index.less';
 import PropertiesPanel from "./components/PropertiesPanel";
 import { zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu } from "./modules";
 

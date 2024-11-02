@@ -1,0 +1,76 @@
+.djs-element.selected .djs-outline {
+    stroke: transparent;
+}
+
+.success.djs-shape .djs-visual> :nth-child(1) {
+    fill: #eaff8f !important;
+    stroke: #52c41a !important;
+    fill-opacity: 0.2 !important;
+}
+
+.process.djs-shape .djs-visual> :nth-child(1) {
+    fill: #91caff !important;
+    stroke: #4096ff !important;
+    fill-opacity: 0.2 !important;
+    stroke-dasharray: 4, 4;
+    animation: dash 100s linear;
+}
+@keyframes dash {
+    to {
+        stroke-dashoffset: 1500;
+    }
+}
+
+.danger.djs-shape .djs-visual> :nth-child(1) {
+    fill: #ffa39e !important;
+    stroke: #ff4d4f !important;
+    fill-opacity: 0.2 !important;
+}
+
+.warning.djs-shape .djs-visual> :nth-child(1) {
+    fill: #ffd591 !important;
+    stroke: #ffa940 !important;
+    fill-opacity: 0.2 !important;
+}
+
+.cyan.djs-shape .djs-visual> :nth-child(1) {
+    fill: #87e8de !important;
+    stroke: #36cfc9 !important;
+    fill-opacity: 0.2 !important;
+}
+
+.purple.djs-shape .djs-visual> :nth-child(1) {
+    fill: #d3adf7 !important;
+    stroke: #9254de !important;
+    fill-opacity: 0.2 !important;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -100%;
+    left: 50%;
+    margin-left: -60px;
+
+    /* Fade in tooltip */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
