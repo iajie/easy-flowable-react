@@ -1,10 +1,9 @@
 ---
 title: 前端组件
 order: 1
-toc: content
 ---
 
-## EasyFlowable 流程设计器
+## EasyFlowable
 > `EasyFlowable`是基于 `Ant Design` + `bpmn.js` 而开发的流程设计器组件，提供了更高级别的组合支持，开箱即用。可以显著地提升流程设计整合进度，更加专注于业务。
 
 ## API

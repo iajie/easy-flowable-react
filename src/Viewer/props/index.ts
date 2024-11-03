@@ -96,14 +96,14 @@ export interface EasyFlowableViewer {
      * @param type 节点类型
      * @param node 节点信息
      */
-    onClick?: (id: string, type: string, node: any) => Promise<PopoverContent>;
+    onClick?: (id: string, type?: string, node?: any) => Promise<PopoverContent>;
     /**
      * @description 弹出框中间内容自定义渲染
      * @param id 节点ID
      * @param type 节点类型
      * @param node 节点信息
      */
-    tipRender?: (id: string, type: string, node: any) => ReactNode;
+    tipRender?: (id: string, type?: string, node?: any) => ReactNode;
 }
 
 export type PopoverContent = {
