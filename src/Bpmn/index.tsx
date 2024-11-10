@@ -30,7 +30,7 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
             const bpmn = new BpmnModeler({
                 container: containerRef.current,
                 height: `${height}vh`,
-                additionalModules: [zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu],
+                additionalModules: [zhTranslateModule],
                 keyboard: {
                     bindTo: document
                 },

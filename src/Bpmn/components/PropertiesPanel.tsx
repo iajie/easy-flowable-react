@@ -365,9 +365,15 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 				<Input />
 			</Form.Item>
 			{nodeType(nodeRef.current) === 'SequenceFlow' && <Form.Item
-				label="表达式" name={['conditionExpression', 'body']} tooltip="条件表达式为EL表达式，结果需为true/false"
+				label="表达式" name={['conditionExpression', 'body']} tooltip="条件表达式为UEL表达式，结果需为true/false"
 				rules={[{ validator: (_, value) => ELValidtor(value) }]}>
 				<TextArea />
+			</Form.Item>}
+			{(nodeType(nodeRef.current) === 'UserTask' || nodeType(nodeRef.current) === 'ScriptTask' ||
+                nodeType(nodeRef.current) === 'ServiceTask') && <Form.Item
+				label="跳过条件" name="skipExpression"
+				rules={[{ validator: (_, value) => ELValidtor(value) }]}>
+				<Input />
 			</Form.Item>}
 			{(nodeType(nodeRef.current) === 'UserTask' && !multiInstances.show) && <Form.Item label="分配用户">
 				<Form.Item>
