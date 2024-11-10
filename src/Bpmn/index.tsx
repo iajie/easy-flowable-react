@@ -4,7 +4,7 @@
  * @Author: MoJie
  */
 import React from "react";
-import './props/index.less';
+import './index.less';
 import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/diagram-js.css";
 import BpmnModeler from 'bpmn-js/lib/Modeler';
@@ -100,8 +100,8 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
     return <div style={{ width: "100%", position: 'relative' }}>
         {(modeler && props.toolbarRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
             <Toolbar {...props.toolbar} modeler={modeler} bpmnData={bpmnData} uploadXml={(xml) => setXml(xml)} />)}
-        <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }}/>
+        <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }} />
         {(modeler && defaultElement && props.panelRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
-                <PropertiesPanel { ...props.panel } modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
+            <PropertiesPanel {...props.panel} modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
     </div>
 }

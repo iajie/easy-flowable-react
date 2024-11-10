@@ -1,6 +1,8 @@
 ---
-title: 前端组件
-order: 1
+title: '设计器配置'
+nav:
+  title: 前端组件
+  order: 2
 ---
 
 ## EasyFlowable
@@ -33,7 +35,7 @@ order: 1
 | style | 设计器顶部工具栏样式 | `CSSProperties` | - |
 | title | 设计器标题(顶部文字) | `dom` | `Easy-Flowable流程设计器` |
 
-### PanelProps 
+### PanelProps
 <Badge type="warning">属性操作面板</Badge>
 |            参数          |               说明               |    类型    |         默认值              |
 |-------------------------|---------------------------------|------------|-----------------------------|

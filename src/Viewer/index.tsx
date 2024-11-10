@@ -1,6 +1,6 @@
 import React from "react";
-import './props/index.less';
-import { DatePicker, Descriptions, Popover, Spin, Tag } from "antd";
+import './index.less';
+import { Descriptions, Popover, Spin, Tag } from "antd";
 import BpmnModeler from "bpmn-js/lib/Modeler";
 type Element = import('bpmn-js/lib/model/Types').Element;
 import Modeling from "bpmn-js/lib/features/modeling/Modeling";
@@ -165,13 +165,13 @@ export default ({ height = 50, mode = 'read', ...props }: EasyFlowableViewer) =>
             if (duration < 1000) {
                 return <Tag color='success'>耗时：{duration}毫秒</Tag>
             } else if (duration >= 1000 && duration < 60 * 1000) {
-                return <Tag color='success'>耗时：{duration/1000}秒</Tag>
+                return <Tag color='success'>耗时：{duration / 1000}秒</Tag>
             } else if (duration >= 60 * 1000 && duration < 60 * 60 * 1000) {
-                return <Tag color='success'>耗时：{(duration/(60 * 1000)).toFixed(0)}分钟</Tag>
+                return <Tag color='success'>耗时：{(duration / (60 * 1000)).toFixed(0)}分钟</Tag>
             } else if (duration >= 60 * 60 * 1000 && duration < 24 * 60 * 60 * 1000) {
-                return <Tag color='success'>耗时：{(duration/(60 * 60 * 1000)).toFixed(2)}小时</Tag>
+                return <Tag color='success'>耗时：{(duration / (60 * 60 * 1000)).toFixed(2)}小时</Tag>
             } else if (duration >= 24 * 60 * 60 * 1000) {
-                return <Tag color='warning'>耗时：{(duration/(24 * 60 * 60 * 1000)).toFixed(2)}天</Tag>
+                return <Tag color='warning'>耗时：{(duration / (24 * 60 * 60 * 1000)).toFixed(2)}天</Tag>
             }
         }
         return <Tag color='processing'>待办</Tag>
@@ -184,7 +184,7 @@ export default ({ height = 50, mode = 'read', ...props }: EasyFlowableViewer) =>
                     if (typeof res == 'string') {
                         setXml(res);
                     } else {
-                       setXml(res);
+                        setXml(res);
                     }
                 } else {
                     setXml(defaultXml);

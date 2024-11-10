@@ -1,6 +1,9 @@
 ---
-title: 流程图组件
+title: '流程图配置'
 order: 2
+nav:
+  title: 前端组件
+  order: 2
 ---
 
 ## EasyFlowableViewer 流程图组件
