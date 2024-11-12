@@ -14,6 +14,10 @@ export interface Option {
 
 export interface BpmnProps {
     /**
+     * @description 国际化
+     */
+    locale?: 'zh-CN' | 'en-CN';
+    /**
      * @description 画布字符串
      * @default
      */

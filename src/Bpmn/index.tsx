@@ -12,12 +12,15 @@ import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
 import { bpmnDefaultStyle, BpmnProps, xmlStr, Element } from "./props";
 import Toolbar from "./components/Toolbar";
 import PropertiesPanel from "./components/PropertiesPanel";
-import { zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu } from "./modules";
+import { zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu, EasyFlowablePalette } from "./modules";
+import { ConfigProvider, theme } from "antd";
+import zhCN from 'antd/locale/zh_CN';
+import enCN from 'antd/locale/en_US';
 
 /**
  * 自定义画布组件
  */
-export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: BpmnProps) => {
+export default ({ height = 60, locale = 'zh-CN', align = 'default', bpmnStyle = {}, ...props }: BpmnProps) => {
 
     const containerRef = React.useRef(null);
     const [bpmnData, setBpmnData] = React.useState<any>();
@@ -30,12 +33,17 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
             const bpmn = new BpmnModeler({
                 container: containerRef.current,
                 height: `${height}vh`,
-                additionalModules: [zhTranslateModule],
+                additionalModules: [
+                    locale == 'zh-CN' ? zhTranslateModule : {},
+                    EasyFlowablePopupMenu,
+                    EasyFlowableContextPad,
+                    EasyFlowablePalette
+                ],
                 keyboard: {
                     bindTo: document
                 },
                 bpmnRenderer: {
-                    defaultLabelColor: "#000",
+                    defaultLabelColor: '#000',
                     defaultFillColor: '#eef4ff',
                     defaultStrokeColor: '#349afa'
                 },
@@ -97,11 +105,13 @@ export default ({ height = 60, align = 'default', bpmnStyle = {}, ...props }: Bp
         }
     }, []);
 
-    return <div style={{ width: "100%", position: 'relative' }}>
-        {(modeler && props.toolbarRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
-            <Toolbar {...props.toolbar} modeler={modeler} bpmnData={bpmnData} uploadXml={(xml) => setXml(xml)} />)}
-        <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }} />
-        {(modeler && defaultElement && props.panelRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
-            <PropertiesPanel {...props.panel} modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
-    </div>
+    return <ConfigProvider locale={locale == 'zh-CN' ? zhCN : enCN} theme={{ algorithm: theme.defaultAlgorithm }}>
+        <div style={{ width: "100%", position: 'relative' }}>
+            {(modeler && props.toolbarRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
+                <Toolbar {...props.toolbar} modeler={modeler} bpmnData={bpmnData} uploadXml={(xml) => setXml(xml)} />)}
+            <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }} />
+            {(modeler && defaultElement && props.panelRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
+                <PropertiesPanel {...props.panel} modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
+        </div>
+    </ConfigProvider>
 }

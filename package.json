@@ -83,7 +83,13 @@
         "type": "github",
         "url": "https://github.com/iajie/easy-flowable-react"
     },
-    "keywords": ["easyflowable", "easy-flowable", "antd+bpmn", "antd", "bpmn.js"],
+    "keywords": [
+        "easyflowable",
+        "easy-flowable",
+        "antd+bpmn",
+        "antd",
+        "bpmn.js"
+    ],
     "authors": [
         "Mojie",
         "easyflowable@yeah.net"
