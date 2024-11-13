@@ -2,9 +2,9 @@
 group:
     title: API
 toc: content
-title: 流程部署
+title: Deployment
 order: 2
 ---
-:::info{title=小提示}
-流程实例对应接口：EasyDeploymentService
+:::info{title=Quick Tips}
+Deployment APIs：EasyDeploymentService
 :::

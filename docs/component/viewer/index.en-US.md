@@ -1,6 +1,6 @@
 ---
 sidebar: false
-title: 流程图Demo
+title: Viewer Demo
 order: 3
 ---
 
@@ -14,24 +14,23 @@ import { Avatar, Card, Popover, Space, Tag } from "antd";
 export default () => {
 
     return <EasyFlowableViewer
-        excludeType={['SequenceFlow']} // 条件不展示
+        excludeType={['SequenceFlow']}
         onClick={async (id, type, node) => {
             const date = new Date();
             const startTime = '2024-11-02 19:54:16';
             const duration = date.getTime() - Date.parse(startTime);
-            // 休眠0.5s体现异步
             await new Promise(resolve => setTimeout(resolve, 500));
             return {
                 users: <Space>
                     <Tag>Easy-Flowable</Tag>
                     <Popover
-                        title="执行人"
+                        title="executor"
                         content={<Card title={false}>
                             <Avatar src={logo}/>
-                            <span>邮箱：easyflowable@yeah.net</span><br/>
-                            <span>电话：00000001</span><br/>
-                            <span>岗位：研发部</span><br/>
-                            <span>角色：架构师</span>
+                            <span>email：easyflowable@yeah.net</span><br/>
+                            <span>phone：00000001</span><br/>
+                            <span>Position: R&D Department</span><br/>
+                            <span>Role: Architect</span>
                         </Card>}>
                         <Tag color="warning">9527</Tag>
                     </Popover>

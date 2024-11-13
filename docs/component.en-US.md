@@ -1,19 +1,19 @@
 ---
-title: '快速开始'
+title: 'Quick start'
 toc: content
 nav:
-  title: 前端组件
+  title: Components
   order: 2
 ---
 
-### React整合
+### React
 
 :::code-group
 ```bash [npm]
 npm install easy-flowable-react
 ```
 
-```ts [设计器] {3}
+```ts [Designer] {3}
 import { EasyFlowable } from 'easy-flowable-react';
 
 export default () => {
@@ -29,31 +29,31 @@ export default () => {
 };
 ```
 
-```ts [流程图] {3}
+```ts [Viewer] {3}
 import { EasyFlowableViewer } from 'easy-flowable-react';
 
 export default () => {
 
-    return <EasyFlowableViewer data='这里是设计器xml' />
+    return <EasyFlowableViewer data='This is xml' />
 };
 ```
 :::
 
-### Vue3整合
+### Vue3
 
 :::code-group
 ```bash [npm]
 npm install easy-flowable-vue3
 ```
 
-```html [设计器] {3}
+```html [Designer] {3}
 <template></template>
 <script>
 
 </script>
 ```
 
-```html [流程图] {3}
+```html [Viewer] {3}
 <template>
 
 </template>
@@ -63,14 +63,14 @@ npm install easy-flowable-vue3
 ```
 :::
 
-### Vue2整合
+### Vue2
 
 :::code-group
 ```bash [npm]
 npm install easy-flowable-vue
 ```
 
-```html [设计器] {3}
+```html [Designer] {3}
 <template>
     <easy-flowable height="81" toolbar-base64 v-model="xml" @save="save"/>
 </template>
@@ -94,7 +94,7 @@ export default {
 </script>
 ```
 
-```html [流程图] {3}
+```html [Viewer] {3}
 <template>
     <easy-flowable-viewer height="81" :data="xml"/>
 </template>

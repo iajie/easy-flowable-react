@@ -2,9 +2,9 @@
 group:
     title: API
 toc: content
-title: 流程实例
+title: Instance
 order: 3
 ---
-:::info{title=小提示}
-流程实例对应接口：EasyProcessInstanceService
+:::info{title=Tips}
+Process Instance APIs：EasyProcessInstanceService
 :::

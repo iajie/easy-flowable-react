@@ -1,54 +1,44 @@
 ---
-title: 任务类型(Task)
+title: Task
 toc: content
 ---
 
-## 用户任务(UserTask)
-<Badge type="info">用户任务只的是改节点需要人工审批</Badge>
+## UserTask
+<Badge type="info">The user task only requires manual approval to modify nodes</Badge>
+|            parameter          |               description               |
+|--------------------------------------------------------|---------------------------------|
+| assignee | Single user: Only one user executes |
+| candidateUsers | Candidate user: Multiple users can perform the task, but only one person can perform it |
+| candidateGroups | Candidate group: It can be a role group or a department group, and there are many users under one group who need to customize and expand |
+
+## Multi-instance
+
 |            参数          |               说明               |
 |--------------------------------------------------------|---------------------------------|
-| assignee | 单个用户：只有一个用户执行 |
-| candidateUsers | 候选用户：多个用户都可以执行该任务，但只能一个人执行 |
-| candidateGroups | 候选组：可以是角色组，也可以是部门组，一个组下有很多个用户需要自定义拓展 |
+| loopCharacteristics.collection | List of Executors(${assigneeList}) |
+| loopCharacteristics.completionCondition.body | Complete expression |
+| loopCharacteristics.loopCardinality | When using a loop instance, the number of loops and the number type cannot be less than 2 times |
 
-## 多实例
-
-|            参数          |               说明               |
-|--------------------------------------------------------|---------------------------------|
-| loopCharacteristics.collection | 执行人列表(为流程变量配置为${assigneeList}) |
-| loopCharacteristics.completionCondition.body | 完成表达式，[具体说明点击查看](../Expression/index.md#完成条件表达式) |
-| loopCharacteristics.loopCardinality | `循环实例用到，循环次数，number类型不能小于2次` |
-
-### 串行
-:::info{title=单实例模式串行}
-执行顺序不分先后，全部执行完成后进入汇集网关
+### Sequential
+:::info{title=Single instance mode Sequential}
+The execution order is not specified, and after all executions are completed, it enters the aggregation gateway
 :::
 ![sequential](./image/sequential.png)
-:::info{title=多实例模式串行}
-执行顺序不分先后，全部执行完成后进入汇集网关，可通过completionCondition完成表达式设置完成条件
+:::info{title=Multi instance mode Sequential}
+The execution order is not in any particular order, and after all executions are completed, it enters the aggregation gateway. The completion condition can be set by completing the expression through perfectionCondition
 :::
 ![sequential](./image/sequential_1.png)
 
 ### 并行
-:::info{title=单实例模式并行}
-执行顺序按照流程图顺序执行，全部执行完成后结束
+:::info{title=Single instance mode parallel}
+The execution sequence follows the flowchart sequence, and ends after all executions are completed
 :::
 ![sequential](./image/parallel.png)
-:::info{title=多实例模式并行}
-执行顺序按照流程图顺序执行，执行人列表list按顺序执行当前任务，全部完成后结束，可通过completionCondition完成表达式设置完成条件
+:::info{title=Parallel multi instance mode}
+The execution sequence follows the flowchart sequence, and the list of executors executes the current task in order. After all tasks are completed, it ends. The completion condition can be set through the completion condition expression
 :::
 ![sequential](./image/parallel_1.png)
 
-### 循环
-:::info{title=单实例模式循环}
-执行顺序按照流程图顺序执行，全部执行完成后结束
-:::
-![sequential](./image/loop.png)
-## 服务任务
-:::info{title=多实例模式循环}
-执行一个任务n次，达到执行次数后结束循环,需要设置参数loopCharacteristics.loopCardinality为需要循环的次数
-:::
-![sequential](./image/loop_1.png)
-## 服务任务
-## 邮件任务
-## 脚本任务
+## ServiceTask
+## EmailTask
+## ScriptTask

@@ -1,57 +1,58 @@
 ---
-title: '流程图配置'
+title: 'Viewer'
 order: 2
 nav:
-  title: 前端组件
+  title: Components
   order: 2
 ---
 
-## EasyFlowableViewer 流程图组件
-> `EasyFlowableViewer`是基于 `Ant Design` + `bpmn.js` 而开发的流程图预览组件。
+## EasyFlowableViewer Components
+> `EasyFlowableViewer`It is based on `Ant Design` + `bpmn.js` And the developed flowchart preview component。
 
 ## API
-|            属性名          | 描述                                          | 类型                                                                   | 默认值    |
-|--------------------------------------------------------|---------------------------------------------|----------------------------------------------------------------------|--------|
-| data | 画布字符串                                       | string                                                               | -      |
-| request | 异步方法，如果你的数据需要<br/>网络请求，那么你可以使用<br/>该方法，如果使用该方法会覆盖data | `() => Promise<string 丨 NodeType>`                                   | -      |
-| height | 设计器高度(屏幕可视高度)                               | `number`                                                             | `60`   |
-| mode | 显示模式，read为单显示为设计器<br/>样式，active为流程图模式            | `read`丨`active`                                                      | `read` |
-| active | 流程图模式                                       | [ActiveProps](#ActiveProps)                                          | -      |
-| excludeType | 排除节点类型，如果添加<br/>点击节点将不会弹出框                       | `string[]`                                                           | -      |
-| onClick | 点击流程图节点触发事件                                 | `(id: string, type?: string, node?: any) => Promise<PopoverContent>` | -      |
-| tipRender | 点击流程图节点弹出框内容自定义                             | `(id: string, type?: string, node?: any) => ReactNode`               | -      |
+|            parameter          | description                                          | type                                                                 | default |
+|--------------------------------------------------------|---------------------------------------------|----------------------------------------------------------------------|---------|
+| data | Canvas string                                       | string                                                               | -       |
+| request | Asynchronous method, if your data requires network requests, <br/>you can use this method, which will overwrite the data | `() => Promise<string 丨 NodeType>`                                   | -       |
+| height | Designer height (screen visible height)                               | `number`                                                             | `60`    |
+| mode | Display mode, read for single display in designer style, active for flowchart mode            | `read`丨`active`                                                      | `read`  |
+| active | Process diagram mode                                       | [ActiveProps](#ActiveProps)                                          | -       |
+| excludeType | Exclude node types, if you add<br/>, clicking on a node will not pop up a dialog box                       | `string[]`                                                           | -       |
+| onClick | Click on the flowchart node to trigger an event                                 | `(id: string, type?: string, node?: any) => Promise<PopoverContent>` | -       |
+| tipRender | Click on the flowchart node to customize the pop-up box content                             | `(id: string, type?: string, node?: any) => ReactNode`               | -       |
 
 ### NodeType
 
-:::warning{title=提示}
-要使activeNode和executeNode生效，需要设置mode="active"
+:::warning{title=Tips}
+To make ActiveNode and ExecuteNode effective, mode="active" needs to be set
 :::
 
-|     属性名      | 描述      | 类型        | 默认值 |
-|--------------|---------|-----------|-----|
-| data | 设计器数据xml | string    | -   |
-| activeNode | 激活节点    | string[]  | -   |
-| executeNode | 执行节点    | string[]  | -   |
+|     parameter      | description      | type        | default |
+|--------------|---------|-----------|---------|
+| data | xml | string    | -       |
+| activeNode | Activate Node    | string[]  | -       |
+| executeNode | Executable Node    | string[]  | -       |
 
 ### ActiveProps
-:::warning{title=提示}
-注意activeNode和executeNode生效，需要设置mode="active"，且会被request异步返回的结果覆盖
+:::warning{title=Tips}
+To make ActiveNode and ExecuteNode effective, mode="active" needs to be set And it will be 
+overwritten by the asynchronous results returned by the request
 :::
 
-|     属性名      | 描述      | 类型                                    | 默认值       |
-|--------------|---------|---------------------------------------|-----------|
-| activeColor | 激活节点颜色 | `success丨process丨danger丨warning丨cyan丨purple` | `process` |
-| activeNode | 激活节点    | string[] | -         |
-| executeColor | 已执行节点 | `success丨process丨danger丨warning丨cyan丨purple` | `success` |
-| executeNode | 执行节点    | string[] | -         |
+|     parameter      | description           | type                                    | default       |
+|--------------|-----------------------|---------------------------------------|-----------|
+| activeColor | Activate node color   | `success丨process丨danger丨warning丨cyan丨purple` | `process` |
+| activeNode | Activate Node         | string[] | -         |
+| executeColor | Executable node color | `success丨process丨danger丨warning丨cyan丨purple` | `success` |
+| executeNode | Executable Node                  | string[] | -         |
 
 ### PopoverContent
 
-| 属性名 | 描述     | 类型         | 是否必须    | 默认值                         |
+| parameter | description     | type         | required   | default                         |
 |-----|--------|------------|---------|-----------------------------|
-| title | 弹出框标题  | `string`   | `false` | 流程图节点名称                     |
-| users | 节点执行人  | `string[]丨ReactNode` | `true`  | -                           |
-| status | 节点状态   | `string丨ReactNode` | `false` | 流程图executeNode和activeNode状态 |
-| startTime | 任务开始时间 | `string丨Date` | `false` | -                           |
-| endTime | 任务结束时间 | `string丨Date` | `false` | -                           |
-| duration | 任务耗时 | `number` | `false` | -                           |
+| title | Pop up box title  | `string`   | `false` | Node names in the flowchart                     |
+| users | Node executor  | `string[]丨ReactNode` | `true`  | -                           |
+| status | node status   | `string丨ReactNode` | `false` | Flowchart ExecutionNode and ActiveNode Status |
+| startTime | Task start time | `string丨Date` | `false` | -                           |
+| endTime | Task end time | `string丨Date` | `false` | -                           |
+| duration | Task time consumption | `number` | `false` | -                           |

@@ -1,6 +1,6 @@
 ---
 sidebar: false
-title: 设计器Demo
+title: Designer Demo
 order: 1
 ---
 
@@ -30,7 +30,10 @@ export default () => {
 ```
 
 :::warning{title=tip}
-在设计器中，可以传递data/request来给设计器传递数据，数据需要为bpmn2.0规范的xml数据。
-在toolbar和panel自定义渲染中都会返回设计器实例，可以自定义实现很多功能。
-如果您需要保存操作，那么您可以通过toolbar的save方法，方法会返回xml和缩略图以及模型信息！
+In the designer, data/request can be passed to the designer, 
+and the data needs to be XML data in the BPMN2.0 specification.
+In both toolbar and panel custom rendering, designer instances are returned, 
+which can be customized to implement many functions.
+If you need to save the operation, you can use the save method in the toolbar, 
+which will return XML, thumbnail, and model information!
 :::

@@ -2,9 +2,9 @@
 group:
     title: API
 toc: content
-title: 流程任务
+title: Task
 order: 4
 ---
-:::info{title=小提示}
-流程任务对应接口：EasyTaskService
+:::info{title=Tips}
+Task APIs：EasyTaskService
 :::

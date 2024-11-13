@@ -1,63 +1,59 @@
 ---
-title: '设计器配置'
+title: 'Designer'
 nav:
-  title: 前端组件
+  title: Components
   order: 2
 ---
 
 ## EasyFlowable
-> `EasyFlowable`是基于 `Ant Design` + `bpmn.js` 而开发的流程设计器组件，提供了更高级别的组合支持，开箱即用。可以显著地提升流程设计整合进度，更加专注于业务。
+> `EasyFlowable`It is based on `Ant Design` + `bpmn.js` The developed process designer 
+> component provides higher-level combination support and is ready to use out of the box. 
+> It can significantly improve the integration progress of process design and focus more on business.
 
 ## API
-<Badge type="warning">所有以 Render 为后缀的方法都可以通过传入 false 来使其不渲染。</Badge>
-|            属性名          |               描述               |    类型    |         默认值              |
+<Badge type="warning">All methods with the suffix 'Render' can be rendered without rendering by passing false.</Badge>
+|            parameter          |               description               |    type    |         default              |
 |--------------------------------------------------------|---------------------------------|------------|-----------------------------|
-| data | 画布字符串 | string | - |
-| request | 异步方法，如果你的数据需要网络请求，<br>那么你可以使用该方法，如果使用该方法会覆盖data | `() => Promise<string>` | - |
-| height | 设计器高度 | `number` | `60` |
-| bpmnStyle | 设计器样式 | `CSSProperties` | - |
-| toolbarStyle | 设计器顶部工具栏样式 | `CSSProperties` | - |
-| align | 设计器打开时所在位置,默认在左上角 | `center` | default&nbsp; |
-| toolbar | 顶部工具栏属性 | [ToolbarProps](#toolbarprops) | - |
-| toolbarRender&nbsp; | 工具栏自定义渲染 | `(modeler) => dom` 丨 `false` | - |
-| panel | 节点属性操作面板 | [PanelProps](#panelprops) | - |
-| panelRender | 工具栏自定义渲染 | `(modeler) => dom` 丨 `false` | - |
-| flowKey | 流程key, flowabl部署会用到，一般就是模型key | `string` | - |
-| flowName | 流程名称：流程部署后显示的信息 | `string` | - |
-| author | 流程作者 | `string` | - |
+| data | Canvas string | string | - |
+| request | Asynchronous method, if your data requires network requests, <br/>you can use this method, which will overwrite the data | `() => Promise<string>` | - |
+| height | Designer height (screen visible height)  | `number` | `60` |
+| bpmnStyle | Designer Style | `CSSProperties` | - |
+| toolbarStyle | Top toolbar style of designer | `CSSProperties` | - |
+| align | When the designer is opened, it is located in the top left corner by default | `center` | default&nbsp; |
+| toolbar | Top toolbar properties | [ToolbarProps](#toolbarprops) | - |
+| toolbarRender&nbsp; | Custom rendering of toolbar | `(modeler) => dom` 丨 `false` | - |
+| panel | Node Attribute Operation Panel | [PanelProps](#panelprops) | - |
+| panelRender | Custom rendering of toolbar | `(modeler) => dom` 丨 `false` | - |
 
 ### ToolbarProps
-<Badge type="warning">顶部工具栏</Badge>
-|            参数          |               说明               |    类型    |         默认值              |
+<Badge type="warning">Top Toolbar</Badge>
+|            parameter          |               description               |    type    |         default              |
 |-------------------------|---------------------------------|------------|-----------------------------|
-| save | 保存方法，会作用与Ctrl+S | `(data: SaveProps) => Promise<void>`[SaveProps](#saveprops) | - |
-| isBase64 | 是否保存base64信息 | `boolean` | `false` |
-| style | 设计器顶部工具栏样式 | `CSSProperties` | - |
-| title | 设计器标题(顶部文字) | `dom` | `Easy-Flowable流程设计器` |
+| save | The preservation method will have an impact on Ctrl+S | `(data: SaveProps) => Promise<void>`[SaveProps](#saveprops) | - |
+| isBase64 | Do you want to save the base64 information | `boolean` | `false` |
+| style | Top toolbar style of designer | `CSSProperties` | - |
+| title | Designer Title (Top Text) | `dom` | `Easy-Flowable Process Designer` |
 
 ### PanelProps
-<Badge type="warning">属性操作面板</Badge>
-|            参数          |               说明               |    类型    |         默认值              |
+<Badge type="warning">Attribute operation panel</Badge>
+|            parameter          |               description               |    type    |         default              |
 |-------------------------|---------------------------------|------------|-----------------------------|
-| attrPrefix | 节点前缀，可适配activty | `string` | `flowable:` |
-| style | 属性操作面板样式 | `CSSProperties` | - |
-| width | 抽屉宽度 | `number 丨 string` | - |
-| users | 用户列表(用户自定义) | `option[]` 丨 `() => Promise<option[]>` | - |
-| groups | 候选组(可以是角色、部门...) | `option[]` 丨 `() => Promise<option[]>` | - |
+| attrPrefix | Node prefix, adaptable activty | `string` | `flowable:` |
+| style | Attribute operation panel style | `CSSProperties` | - |
+| width | Drawer width | `number 丨 string` | - |
+| users | User List (User defined) | `option[]` 丨 `() => Promise<option[]>` | - |
+| groups | Candidate groups (can be roles, departments, etc.) | `option[]` 丨 `() => Promise<option[]>` | - |
 
 ### SaveProps
-<Badge type="warning">保存参数</Badge>
-|            参数          |               说明               |    类型    |
+<Badge type="warning">Save parameters</Badge>
+|            parameter          |               description               |    type    |
 |-------------------------|---------------------------------|------------|
-| xml | 设计器数据 | `string` |
-| base64 | 设计器缩略图base64编码，默认不会返回， | `string` |
-| name | 流程模型名称，当编辑设计器基础面板信息后会返回 | `string` |
-| description | 设计器描述，当编辑设计器基础面板信息后会返回 | `string` |
-| author | 流程作者, 当编辑设计器基础面板信息后会返回 | `string` |
+| xml | Designer Data | `string` |
+| base64 | Designer thumbnail base64 encoding, default not returned | `string` |
 
 ### option
-<Badge type="warning">列表属性</Badge>
-|            参数          |               说明               |    类型    |
-|-------------------------|---------------------------------|------------|
-| label | 列表显示值 | `string` |
-| value | 实际值(userId/organId) | `string` |
+<Badge type="warning">Lists Properties</Badge>
+|            parameter          |    type    |
+|-------------------------|------------|
+| label | `string` |
+| value | `string` |

@@ -2,7 +2,7 @@
 sidebar: false
 toc: content
 nav:
-    title: 更新日志
+    title: Update log
     order: 5
 ---
 
