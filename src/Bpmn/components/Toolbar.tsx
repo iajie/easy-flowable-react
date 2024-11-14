@@ -230,11 +230,14 @@ const Toolbar: React.FC<ToolbarProps> = ({ modeler, save, style = {}, ...props }
                         <Button icon={<DownloadOutlined />}></Button>
                     </Dropdown>
                 </Space.Compact>
-                {save && (
-                    <Popover content="保存更新">
-                        <Button icon={<SaveOutlined />} onClick={() => xmlSave()} />
-                    </Popover>
-                )}
+                <Space.Compact block>
+                    {save && (
+                        <Popover content="保存更新">
+                            <Button icon={<SaveOutlined />} onClick={() => xmlSave()} />
+                        </Popover>
+                    )}
+                </Space.Compact>
+
                 {props.title ? (
                     props.title
                 ) : (

@@ -9,11 +9,12 @@ import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/diagram-js.css";
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
+import { ActionOptions } from './props/panel'
 import { bpmnDefaultStyle, BpmnProps, xmlStr, Element } from "./props";
 import Toolbar from "./components/Toolbar";
 import PropertiesPanel from "./components/PropertiesPanel";
 import { zhTranslateModule, EasyFlowableContextPad, EasyFlowablePopupMenu, EasyFlowablePalette } from "./modules";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, Splitter, theme } from "antd";
 import zhCN from 'antd/locale/zh_CN';
 import enCN from 'antd/locale/en_US';
 
@@ -23,7 +24,6 @@ import enCN from 'antd/locale/en_US';
 export default ({ height = 60, locale = 'zh-CN', align = 'default', bpmnStyle = {}, ...props }: BpmnProps) => {
 
     const containerRef = React.useRef(null);
-    const [bpmnData, setBpmnData] = React.useState<any>();
     const [modeler, setModeler] = React.useState<BpmnModeler>();
     const [xml, setXml] = React.useState<string | null>(null);
     const [defaultElement, setDefaultElement] = React.useState<Element>();
@@ -106,12 +106,19 @@ export default ({ height = 60, locale = 'zh-CN', align = 'default', bpmnStyle = 
     }, []);
 
     return <ConfigProvider locale={locale == 'zh-CN' ? zhCN : enCN} theme={{ algorithm: theme.defaultAlgorithm }}>
-        <div style={{ width: "100%", position: 'relative' }}>
-            {(modeler && props.toolbarRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
-                <Toolbar {...props.toolbar} modeler={modeler} bpmnData={bpmnData} uploadXml={(xml) => setXml(xml)} />)}
-            <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }} />
-            {(modeler && defaultElement && props.panelRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
-                <PropertiesPanel {...props.panel} modeler={modeler} defaultElement={defaultElement} bpmnInfo={(data) => setBpmnData(data)} />)}
-        </div>
+        <Splitter style={{ width: "100%" }}>
+            <Splitter.Panel defaultSize="70%" min="50%">
+                {(modeler && props.toolbarRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
+                    <Toolbar {...props.toolbar} modeler={modeler} uploadXml={(xml) => setXml(xml)} />)}
+                <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }} />
+            </Splitter.Panel>
+            <Splitter.Panel collapsible defaultSize="30%" min="20%">
+                {(modeler && defaultElement && props.panelRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
+                    <PropertiesPanel {...props.panel} modeler={modeler} defaultElement={defaultElement} />)}
+            </Splitter.Panel>
+        </Splitter>
     </ConfigProvider>
+}
+export type {
+    ActionOptions
 }

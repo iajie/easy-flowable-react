@@ -3,10 +3,13 @@
  * @Description: 侧边属性栏
  * @Author: MoJie
  */
-import { Alert, Drawer, Form, Input, InputNumber, Popover, Radio, Select, Switch, Typography } from "antd";
-import React from "react";
+import {
+    Alert, Checkbox, Col, Collapse, CollapseProps, Form, Input, List,
+    Popover, Radio, Row, Select, Switch, Tag, Typography
+} from "antd";
+import React, { Fragment } from "react";
 import { userType, defaultType, defaultUser, Option, MultiInstancesProperties, serviceType, scriptType } from "../props/userTask";
-import { PanelProps, Element, BusinessObjectType, nodeType, ELValidtor, multiInstancesType, spELValidtor } from "../props/panel";
+import { PanelProps, Element, BusinessObjectType, nodeType, multiInstancesType, elValid, elCheck, ActionOptions } from "../props/panel";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
@@ -14,6 +17,7 @@ import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-markup';
 import 'prismjs/components/prism-jsx';
+import { ItemType } from "rc-collapse/es/interface";
 type EventBus = import('diagram-js/lib/core/EventBus').default;
 type Modeling = import('bpmn-js/lib/features/modeling/Modeling').default;
 type BpmnFactory = import('bpmn-js/lib/features/modeling/BpmnFactory').default;
@@ -21,19 +25,18 @@ type BpmnFactory = import('bpmn-js/lib/features/modeling/BpmnFactory').default;
 const { TextArea } = Input;
 const { Paragraph } = Typography;
 
-const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style = { opacity: 0.7 }, attrPrefix = "flowable:", ...props }) => {
+const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPrefix = "flowable:", ...props }) => {
 
 	const modeling: Modeling = modeler.get('modeling');
 
 	const [form] = Form.useForm();
-    const [bpmnData, setBpmnData] = React.useState<any>();
 	const ignoreElementChanged = React.useRef(false);
-	const [open, setOpen] = React.useState<boolean>(false);
 	const nodeRef = React.useRef<BusinessObjectType>();
 	const [currentElement, setCurrentElement] = React.useState<Element>(defaultElement);
 
 	/**                        用户任务属性                                    **/
 	const [taskType, setTaskType] = React.useState<string>();
+	const [userActionType, setUserActionType] = React.useState<'uel' | 'custom'>('custom');
 	const [users, setUsers] = React.useState<Option[]>([]);
 	const [usersLoading, setUsersLoading] = React.useState(false);
 	const [groups, setGroups] = React.useState<Option[]>([]);
@@ -106,9 +109,6 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 			} else {
 				setMultiInstances({ show: false });
 			}
-			setOpen(true);
-		} else {
-			setOpen(false);
 		}
         // 设置当前选择元素
         setCurrentElement(element);
@@ -142,165 +142,64 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		}
 	}, [modeler]);
 
-	const onValuesChange = (changeValue: Partial<BusinessObjectType>) => {
-		if (changeValue.id) {
-			updateElementProperty('id', changeValue.id);
-		}
-		if (changeValue.name) {
-			updateElementProperty('name', changeValue.name);
-		}
-		if (changeValue.description) {
-			updateElementProperty(attrPrefix + 'description', changeValue.description);
-		}
-		if (changeValue.author) {
-			updateElementProperty('author', changeValue.author);
-		}
-		if (changeValue.color) {
-			modeling.setColor([currentElement], { stroke: changeValue?.color.toHexString() });
-			updateElementProperty('color', changeValue?.color.toHexString());
-		}
-		// 条件
-		const conditionExpression = changeValue.conditionExpression?.body;
-		if (conditionExpression && spELValidtor(conditionExpression)) {
-			const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
-			const expression = bpmnFactory.create("bpmn:FormalExpression")
-			expression.body = conditionExpression;
-			updateElementProperty("conditionExpression", expression);
-		}
-		// 用户
-		if (changeValue.assignee) {
-			updateElementProperty(attrPrefix + "assignee", changeValue.assignee);
-		}
-		// 候选用户
-		if (changeValue.candidateUsers) {
-			updateElementProperty(attrPrefix + "candidateUsers", changeValue.candidateUsers);
-		}
-		// 候选组
-		if (changeValue.candidateGroups) {
-			updateElementProperty(attrPrefix + "candidateGroups", changeValue.candidateGroups);
-		}
-		// 完成表达式
-		const completionCondition = changeValue.loopCharacteristics?.completionCondition?.body;
-		if (completionCondition && spELValidtor(completionCondition)) {
-			const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
-			const expression = bpmnFactory.create("bpmn:Expression");
-			expression.body = completionCondition;
-			const loopCharacteristics = nodeRef.current?.loopCharacteristics;
-			if (loopCharacteristics) {
-				expression.$parent = loopCharacteristics;
-				loopCharacteristics.completionCondition = expression;
-			}
-			updateElementProperty("loopCharacteristics", loopCharacteristics);
-		}
-		// 集合
-		if (changeValue.loopCharacteristics?.collection) {
-			const loopCharacteristics = nodeRef.current?.loopCharacteristics;
-			if (loopCharacteristics) {
-				loopCharacteristics.$attrs[`${attrPrefix}collection`] = changeValue.loopCharacteristics.collection;
-				if (!changeValue.loopCharacteristics?.elementVariable) {
-					loopCharacteristics.$attrs[`${attrPrefix}elementVariable`] = 'item';
-				}
-			}
-			updateElementProperty("loopCharacteristics", loopCharacteristics);
-		}
-		// 集合元素
-		if (changeValue.loopCharacteristics?.elementVariable) {
-			const loopCharacteristics = nodeRef.current?.loopCharacteristics;
-			if (loopCharacteristics) {
-				loopCharacteristics.$attrs[`${attrPrefix}elementVariable`] = changeValue.loopCharacteristics.collection;
-			}
-			updateElementProperty("loopCharacteristics", loopCharacteristics);
-		}
-		// 循环次数指定
-		if (changeValue.loopCharacteristics?.loopMaximun) {
-			const loopCharacteristics = nodeRef.current?.loopCharacteristics;
-			if (loopCharacteristics) {
-				loopCharacteristics.$attrs[`${attrPrefix}loopMaximun`] = changeValue.loopCharacteristics.loopMaximun;
-			}
-			updateElementProperty("loopCharacteristics", loopCharacteristics);
-		}
-		// 服务类
-		if (changeValue.class) {
-			updateElementProperty(attrPrefix + "class", changeValue.class);
-		}
-		// 委托表达式
-		const delegateExpression = changeValue.delegateExpression;
-		if (delegateExpression && spELValidtor(delegateExpression)) {
-			updateElementProperty(attrPrefix + "delegateExpression", delegateExpression);
-		}
-		// 服务表达式
-		const expression = changeValue.expression;
-		if (expression && spELValidtor(expression)) {
-			updateElementProperty(attrPrefix + "expression", expression);
-		}
-		// 表达式返回结果
-		if (changeValue.resultVariable) {
-			updateElementProperty(attrPrefix + "resultVariable", changeValue.resultVariable);
-		}
-		// 脚本类型
-		if (changeValue.scriptFormat) {
-			updateElementProperty("scriptFormat", changeValue.scriptFormat);
-		}
-		// 是否保存脚本结果
-		if (changeValue.autoStoreVariables === false) {
-			updateElementProperty(attrPrefix + "autoStoreVariables", "false");
-		}
-		if (changeValue.autoStoreVariables === true) {
-			updateElementProperty(attrPrefix + "autoStoreVariables", "true");
-		}
-		// 脚本结果接收参数
-		if (changeValue.resultVariable) {
-			updateElementProperty(attrPrefix + "resultVariable", changeValue.resultVariable);
-		}
+	const onValuesChange = (changeValue: Partial<BusinessObjectType> | any) => {
+        const completionCondition = changeValue.loopCharacteristics?.completionCondition?.body;
+		if (changeValue.id || changeValue.name || changeValue.scriptFormat) {
+			updateElementProperty({ ...changeValue });
+		} else if (changeValue.conditionExpression?.body && elCheck(changeValue.conditionExpression?.body)) {
+            const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
+            const expression = bpmnFactory.create("bpmn:FormalExpression")
+            expression.body = changeValue.conditionExpression?.body;
+            updateElementProperty({"conditionExpression": expression});
+        } else if (changeValue.loopCharacteristics) {
+            const loopCharacteristics = nodeRef.current?.loopCharacteristics;
+            if (loopCharacteristics) {
+                if (changeValue.loopCharacteristics?.collection) {
+                    loopCharacteristics.$attrs[`${attrPrefix}collection`] = changeValue.loopCharacteristics.collection;
+                    if (!changeValue.loopCharacteristics?.elementVariable) {
+                        loopCharacteristics.$attrs[`${attrPrefix}elementVariable`] = 'item';
+                    }
+                } else if (changeValue.loopCharacteristics?.elementVariable) {
+                    loopCharacteristics.$attrs[`${attrPrefix}elementVariable`] = changeValue.loopCharacteristics?.elementVariable;
+                } else if (!changeValue.loopCharacteristics?.loopMaximun) {
+                    loopCharacteristics.$attrs[`${attrPrefix}loopMaximun`] = changeValue.loopCharacteristics.loopMaximun;
+                } else if (completionCondition && elCheck(completionCondition)) {
+                    const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
+                    const expression = bpmnFactory.create("bpmn:Expression");
+                    expression.body = completionCondition;
+                    expression.$parent = loopCharacteristics;
+                    loopCharacteristics.completionCondition = expression;
+                }
+                updateElementProperty({ "loopCharacteristics": loopCharacteristics });
+            }
+        } else {
+            const keys = ['expression', 'delegateExpression'];
+            for (let key in changeValue) {
+                if (keys.includes(key)) {
+                    if (!elCheck(changeValue[key])) {
+                        break;
+                    }
+                }
+                updateElementProperty({ [`${attrPrefix}${key}`]: changeValue[key] });
+            }
+        }
 	}
 
 	React.useEffect(() => {
 		if (script) {
-			updateElementProperty("script", script);
+			updateElementProperty({ script });
 		}
 	}, [script]);
 
 	/**
 	 * 元素属性赋值
-	 * @param property 属性名称
-	 * @param value 属性值
-	 * @param forBusinessObjectAttrs 是否为$attrs属性
+	 * @param data { property: string, value: any }
 	 */
-	const updateElementProperty = (property: string, value: any, forBusinessObjectAttrs: boolean = false) => {
+	const updateElementProperty = (data: {[key: string]: any}) => {
 		if (nodeRef.current && currentElement) {
 			try {
 				ignoreElementChanged.current = true;
-				if (forBusinessObjectAttrs) {
-					currentElement.businessObject.$attrs[attrPrefix + property] = value;
-				} else {
-                    if (nodeType(currentElement.businessObject) == 'Process') {
-                        setBpmnData({ ...bpmnData, [property]: value });
-                        // 返回信息
-                        props.bpmnInfo({ ...bpmnData, [property]: value });
-                    }
-					if (property.endsWith('assignee')) {
-						delete currentElement.businessObject.$attrs[`${attrPrefix}candidateUsers`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}candidateGroups`];
-					} else if (property.endsWith('candidateUsers')) {
-						delete currentElement.businessObject.$attrs[`${attrPrefix}assignee`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}candidateGroups`];
-					} else if (property.endsWith('candidateGroups')) {
-						delete currentElement.businessObject.$attrs[`${attrPrefix}assignee`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}candidateUsers`];
-					} else if (property.endsWith('class')) {
-						delete currentElement.businessObject.$attrs[`${attrPrefix}delegateExpression`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}expression`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}resultVariable`];
-					} else if (property.endsWith('delegateExpression')) {
-						delete currentElement.businessObject.$attrs[`${attrPrefix}class`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}expression`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}resultVariable`];
-					} else if (property.endsWith('expression')) {
-						delete currentElement.businessObject.$attrs[`${attrPrefix}class`];
-						delete currentElement.businessObject.$attrs[`${attrPrefix}delegateExpression`];
-					}
-					modeling.updateProperties(currentElement, { [property]: value });
-				}
+                modeling.updateProperties(currentElement, { ...data });
 			} finally {
 				ignoreElementChanged.current = false;
 			}
@@ -347,146 +246,180 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, style 
 		}
 	}, []);
 
-	return <Drawer
-		style={style}
-		width={props.width}
-		open={open}
-		mask={false}
-		destroyOnClose
-		maskClosable={false}
-		getContainer={false}
-		onClose={() => setOpen(false)}
-		title={<Alert message={`当前对象: ${nodeType(nodeRef.current)}`} />}>
-		<Form onValuesChange={onValuesChange} form={form} labelCol={{ span: 5 }}>
-			<Form.Item label="标识" name="id">
-				<Input readOnly />
-			</Form.Item>
-			<Form.Item label="名称" name="name">
-				<Input />
-			</Form.Item>
-			{nodeType(nodeRef.current) === 'SequenceFlow' && <Form.Item
-				label="表达式" name={['conditionExpression', 'body']} tooltip="条件表达式为UEL表达式，结果需为true/false"
-				rules={[{ validator: (_, value) => ELValidtor(value) }]}>
-				<TextArea />
-			</Form.Item>}
-			{(nodeType(nodeRef.current) === 'UserTask' || nodeType(nodeRef.current) === 'ScriptTask' ||
-                nodeType(nodeRef.current) === 'ServiceTask') && <Form.Item
-				label="跳过条件" name="skipExpression"
-				rules={[{ validator: (_, value) => ELValidtor(value) }]}>
-				<Input />
-			</Form.Item>}
-			{(nodeType(nodeRef.current) === 'UserTask' && !multiInstances.show) && <Form.Item label="分配用户">
-				<Form.Item>
-					<Radio.Group defaultValue={taskType} onChange={(e) => {
-						const value = e.target.value;
-						setTaskType(value);
-						if (value == 'candidateGroups') {
-							form.setFieldValue('candidateUsers', []);
-							form.setFieldValue('assignee', null);
-						} else if (value == 'candidateUsers') {
-							form.setFieldValue('candidateGroups', []);
-							form.setFieldValue('assignee', null);
-						} else {
-							form.setFieldValue('candidateGroups', []);
-							form.setFieldValue('candidateUsers', []);
-						}
-					}} options={userType} />
-				</Form.Item>
-				<Form.Item name={taskType} noStyle>
-					{taskType == 'candidateGroups' ?
-						<Select options={groups} mode="multiple" loading={groupsLoading} /> : <Select
-							mode={taskType === 'candidateUsers' ? "multiple" : undefined}
-							options={taskType === 'candidateUsers' ? users.slice(1) : users}
-							loading={usersLoading} />}
-				</Form.Item>
-			</Form.Item>}
-			{(nodeType(nodeRef.current) === 'UserTask' && multiInstances.show) && <>
-				<Form.Item><Alert message={`实例类型：${multiInstances.text}`} /></Form.Item>
-				{multiInstances.isLoop ? <>
-					<Form.Item label="分配用户" name="candidateUsers">
-						<Select options={users.slice(1)} mode="multiple" loading={usersLoading} />
-					</Form.Item>
-					<Form.Item label="循环次数" name={['loopCharacteristics', 'loopMaximun']}>
-						<InputNumber min={2} style={{ width: '100%' }} />
-					</Form.Item>
-				</> : <>
-					<Form.Item label="集合" name={['loopCharacteristics', 'collection']} tooltip="此处集合为执行人列表，需要在流程启用或运行时设置流程变量。">
-						<Input />
-					</Form.Item>
-					<Form.Item label="变量名" name={['loopCharacteristics', 'elementVariable']} tooltip="集合中的元素的变量名。">
-						<Input />
-					</Form.Item>
-					<Form.Item label={<Popover placement="topRight" title="完成表达式" content={<div style={{ width: '330px' }}>
-						评估是否结束多实例的表达式, 如果表达式结果为true, 则多实例中所有剩余的实例将被销毁, 并且多实例活动结束, 流程离开当前活动继续执行。<br />
-						以下是一些<strong>完成表达式</strong>变量：
-						<Paragraph copyable={{ text: 'nrOfInstances', tooltips: false }}>实例总数: nrOfInstances</Paragraph>
-						<Paragraph copyable={{ text: 'nrOfCompletedInstances', tooltips: false }}>当前还没有完成的实例: nrOfCompletedInstances</Paragraph>
-						<Paragraph copyable={{ text: 'loopCounter', tooltips: false }}>已经循环的次数: loopCounter</Paragraph>
-						<Paragraph copyable={{ text: 'loonrOfActiveInstancespCounter', tooltips: false }}>已经完成的实例个数: nrOfActiveInstances</Paragraph>
-					</div>}>
-						表达式 <QuestionCircleOutlined />
-					</Popover>} name={['loopCharacteristics', 'completionCondition', 'body']}
-						rules={[{ validator: (_, value) => ELValidtor(value) }]}>
-						<TextArea />
-					</Form.Item>
-				</>}
-			</>}
-			{(nodeType(nodeRef.current) === 'ServiceTask' && !multiInstances.show) && <Form.Item label="服务类型">
-				<Form.Item>
-					<Radio.Group defaultValue={taskType} onChange={(e) => {
-						const value = e.target.value;
-						setTaskType(value);
-						if (value == 'delegateExpression') {
-							form.setFieldValue('class', null);
-							form.setFieldValue('expression', null);
-						} else if (value == 'expression') {
-							form.setFieldValue('delegateExpression', null);
-							form.setFieldValue('class', null);
-						} else {
-							form.setFieldValue('delegateExpression', null);
-							form.setFieldValue('expression', null);
-						}
-					}} options={serviceType} />
-				</Form.Item>
-				<Form.Item noStyle>
-					<Form.Item name={taskType} rules={taskType != 'class' ? [{ validator: (_, value) => ELValidtor(value) }] : []}>
-						<TextArea rows={4} />
-					</Form.Item>
-					{taskType == 'expression' && <Form.Item name="resultVariable">
-						<Input addonAfter="返回值" />
-					</Form.Item>}
-				</Form.Item>
-			</Form.Item>}
-			{(nodeType(nodeRef.current) === 'SendTask' && !multiInstances.show) && <Form.Item label="服务类型" name="class">
-				<Form.Item noStyle>
-					<Form.Item name="class">
-						<TextArea rows={4} />
-					</Form.Item>
-				</Form.Item>
-			</Form.Item>}
-			{(nodeType(nodeRef.current) === 'ScriptTask' && !multiInstances.show) && <Form.Item>
-				<Form.Item label="脚本类型" name="scriptFormat">
-					<Radio.Group defaultValue={taskType || 'JavaScript'} onChange={(e) => {
-						const value = e.target.value;
-						setTaskType(value);
-						setScript('');
-					}} options={scriptType} />
-				</Form.Item>
-				<Form.Item label="脚本">
-					<Editor value={script} onValueChange={(value) => setScript(value)} highlight={(code) => Prism.highlight(code, Prism.languages.javascript, 'js')} padding={10}
-						style={{ fontFamily: "monospace", height: '100px', border: '1px solid #d9d9d9', borderRadius: '10px' }} />
-				</Form.Item>
-				{taskType != 'juel' ? <Form.Item label="是否保留脚本结果" name="autoStoreVariables">
-					<Switch defaultChecked={false} />
-				</Form.Item> : <Form.Item label="脚本结果接收参数" name="resultVariable">
-					<Input addonAfter="返回值" />
-				</Form.Item>}
-			</Form.Item>}
-            <Form.Item label="描述" name="description">
+    const collapseItems = (): CollapseProps['items'] => {
+        const arr: CollapseProps['items'] = [{
+            key: 'base',
+            label: '基础属性',
+            children: <Fragment>
+                <Form.Item label="标识" name="id">
+                    <Input readOnly />
+                </Form.Item>
+                <Form.Item label="名称" name="name">
+                    <Input />
+                </Form.Item>
+                {(nodeType(nodeRef.current) == 'UserTask' || nodeType(nodeRef.current) == 'ScriptTask' ||
+                    nodeType(nodeRef.current) == 'ServiceTask') && <Form.Item
+                    label="跳过条件" name="skipExpression"
+                    rules={[{ validator: (_, value) => elValid(value) }]}>
+                    <Input />
+                </Form.Item>}
+            </Fragment>
+        }];
+        const children: ItemType = { key: 'special', label: '特有属性', children: null };
+        if (nodeType(nodeRef.current) == 'SequenceFlow') {
+            children.children = <Form.Item
+                label="表达式" name={['conditionExpression', 'body']}
+                tooltip="条件表达式为UEL表达式，结果需为true/false"
+                rules={[{ validator: (_, value) => elValid(value) }]}>
                 <TextArea />
             </Form.Item>
-		</Form>
-	</Drawer>
+        } else if (nodeType(nodeRef.current) == 'UserTask' && !multiInstances.show) {
+            children.children = <Fragment>
+                <Form.Item label="用户类型">
+                    <Radio.Group
+                        defaultValue={userActionType}
+                        onChange={(e) => setUserActionType(e.target.value)}
+                        options={[{ label: '固定值', value: 'custom' }, { label: '自定义', value: 'uel' }, ]}/>
+                </Form.Item>
+                <Form.Item label="分配用户">
+                    <Form.Item>
+                        <Radio.Group defaultValue={taskType} onChange={(e) => setTaskType(e.target.value)} options={userType} />
+                    </Form.Item>
+                    <Form.Item name={taskType} noStyle>
+                        {userActionType == 'uel' ? <Input/>  : taskType == 'candidateGroups' ?
+                            <Select options={groups} mode="multiple" loading={groupsLoading} /> : <Select
+                                mode={taskType === 'candidateUsers' ? "multiple" : undefined}
+                                options={taskType === 'candidateUsers' ? users.slice(1) : users}
+                                loading={usersLoading} />
+                        }
+                    </Form.Item>
+                </Form.Item>
+            </Fragment>
+        } else if (nodeType(nodeRef.current) == 'UserTask' && multiInstances.show) {
+            children.children = <Fragment>
+                <Form.Item><Alert message={`实例类型：${multiInstances.text}`} /></Form.Item>
+                <Form.Item label="集合" name={['loopCharacteristics', 'collection']} tooltip="此处集合为执行人列表，需要在流程启用或运行时设置流程变量。">
+                    <Input />
+                </Form.Item>
+                <Form.Item label="变量名" name={['loopCharacteristics', 'elementVariable']} tooltip="集合中的元素的变量名。">
+                    <Input />
+                </Form.Item>
+                <Form.Item label={<Popover placement="topRight" title="完成表达式" content={<div style={{ width: '330px' }}>
+                    评估是否结束多实例的表达式, 如果表达式结果为true, 则多实例中所有剩余的实例将被销毁, 并且多实例活动结束, 流程离开当前活动继续执行。<br />
+                    以下是一些<strong>完成表达式</strong>变量：
+                    <Paragraph copyable={{ text: 'nrOfInstances', tooltips: false }}>实例总数: nrOfInstances</Paragraph>
+                    <Paragraph copyable={{ text: 'nrOfCompletedInstances', tooltips: false }}>当前还没有完成的实例: nrOfCompletedInstances</Paragraph>
+                    <Paragraph copyable={{ text: 'loopCounter', tooltips: false }}>已经循环的次数: loopCounter</Paragraph>
+                    <Paragraph copyable={{ text: 'loonrOfActiveInstancespCounter', tooltips: false }}>已经完成的实例个数: nrOfActiveInstances</Paragraph>
+                </div>}>
+                    表达式 <QuestionCircleOutlined />
+                </Popover>} name={['loopCharacteristics', 'completionCondition', 'body']}
+                           rules={[{ validator: (_, value) => elValid(value) }]}>
+                    <TextArea />
+                </Form.Item>
+            </Fragment>
+        } else if (nodeType(nodeRef.current) === 'ServiceTask') {
+            children.children = <Fragment>
+                <Form.Item label="服务类型">
+                    <Form.Item>
+                        <Radio.Group defaultValue={taskType} onChange={(e) => {
+                            const value = e.target.value;
+                            setTaskType(value);
+                            if (value == 'delegateExpression') {
+                                form.setFieldValue('class', null);
+                                form.setFieldValue('expression', null);
+                            } else if (value == 'expression') {
+                                form.setFieldValue('delegateExpression', null);
+                                form.setFieldValue('class', null);
+                            } else {
+                                form.setFieldValue('delegateExpression', null);
+                                form.setFieldValue('expression', null);
+                            }
+                        }} options={serviceType} />
+                    </Form.Item>
+                    <Form.Item noStyle>
+                        <Form.Item name={taskType} rules={taskType != 'class' ? [{ validator: (_, value) => elValid(value) }] : []}>
+                            <TextArea rows={4} />
+                        </Form.Item>
+                        {taskType == 'expression' && <Form.Item name="resultVariable">
+                            <Input addonAfter="返回值" />
+                        </Form.Item>}
+                    </Form.Item>
+                </Form.Item>
+            </Fragment>
+        } else if (nodeType(nodeRef.current) === 'SendTask') {
+            children.children = <Fragment>
+                <Form.Item label="服务类型" name="class">
+                    <Form.Item name="class">
+                        <TextArea rows={4} />
+                    </Form.Item>
+                </Form.Item>
+            </Fragment>
+        } else if (nodeType(nodeRef.current) === 'ScriptTask') {
+            children.children = <Form.Item>
+                <Form.Item label="脚本类型" name="scriptFormat">
+                    <Radio.Group defaultValue={taskType || 'JavaScript'} onChange={(e) => {
+                        const value = e.target.value;
+                        setTaskType(value);
+                        setScript('');
+                    }} options={scriptType} />
+                </Form.Item>
+                <Form.Item label="脚本">
+                    <Editor value={script} onValueChange={(value) => setScript(value)} highlight={(code) => Prism.highlight(code, Prism.languages.javascript, 'js')} padding={10}
+                            style={{ fontFamily: "monospace", height: '100px', border: '1px solid #d9d9d9', borderRadius: '10px' }} />
+                </Form.Item>
+                {taskType != 'juel' ? <Form.Item label="是否保留脚本结果" name="autoStoreVariables">
+                    <Switch defaultChecked={false} />
+                </Form.Item> : <Form.Item label="脚本结果接收参数" name="resultVariable">
+                    <Input addonAfter="返回值" />
+                </Form.Item>}
+            </Form.Item>
+        }
+        if (children.children != null) {
+            arr.push(children);
+        }
+        if (nodeType(nodeRef.current) == 'UserTask') {
+            arr.push({
+                key: 'action',
+                label: '拓展操作',
+                children: <Form.Item label="操作" name="actions">
+                    <Checkbox.Group>
+                        <Row>
+                            { ActionOptions.map(i => <Col key={i.value} span={8}>
+                                <Popover title={i.label} content={<List
+                                    renderItem={(item, index) => <List.Item key={index}>
+                                        <List.Item.Meta description={<span>
+                                            {item.description}
+                                            {i.note && <span style={{color: "#ff9c6e"}}><br/>注: {i.note}</span>}
+                                        </span>}/>
+                                    </List.Item>}
+                                    size="small" bordered dataSource={[{ title: i.label, description: i.description }]}/>}>
+                                    <Checkbox value={i.value} disabled={i.disabled}>{i.label}</Checkbox>
+                                </Popover>
+                            </Col>) }
+                        </Row>
+                    </Checkbox.Group>
+
+                </Form.Item>
+            });
+        }
+        arr.push({
+            key: 'description',
+            label: '文档',
+            children: <Form.Item label="描述" name="description">
+                <TextArea />
+            </Form.Item>
+        })
+        return arr;
+    }
+	return <Form onValuesChange={onValuesChange} form={form} labelCol={{ span: 5 }}>
+        <Alert message={`当前对象: ${nodeType(nodeRef.current)}`} />
+        <Collapse
+            expandIconPosition="end"
+            items={collapseItems()}
+            defaultActiveKey={['base', 'special', 'description', 'action']}
+            />
+    </Form>
 }
 
 export default PropertiesPanel;
