@@ -28,7 +28,6 @@ const { Paragraph } = Typography;
 const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPrefix = "flowable:", ...props }) => {
 
 	const modeling: Modeling = modeler.get('modeling');
-
 	const [form] = Form.useForm();
 	const ignoreElementChanged = React.useRef(false);
 	const nodeRef = React.useRef<BusinessObjectType>();
@@ -129,13 +128,17 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
 		const changedListener = (e: { element: Element }) => {
 			if (!ignoreElementChanged.current) {
 				//忽略顺序流的修改
-				if (e.element.businessObject?.$type.endsWith("SequenceFlow")) {
+				if (nodeType(e.element.businessObject) == "SequenceFlow") {
 					return;
 				}
-				changeCurrentElement(e.element);
+                if (nodeType(e.element.businessObject) !== 'UserTask') {
+                    delete e.element.businessObject.loopCharacteristics;
+                }
+                changeCurrentElement(e.element);
 			}
 		}
 		eventBus.on('element.changed', changedListener);
+        changeCurrentElement(defaultElement);
 		return () => {
 			eventBus.off('element.click', clickListener);
 			eventBus.off('element.changed', changedListener);
@@ -394,7 +397,9 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
                                         </span>}/>
                                     </List.Item>}
                                     size="small" bordered dataSource={[{ title: i.label, description: i.description }]}/>}>
-                                    <Checkbox value={i.value} disabled={i.disabled}>{i.label}</Checkbox>
+                                    <Checkbox value={i.value} disabled={i.disabled}>
+                                        <p>{i.label}</p>
+                                    </Checkbox>
                                 </Popover>
                             </Col>) }
                         </Row>
@@ -412,13 +417,18 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
         })
         return arr;
     }
+
 	return <Form onValuesChange={onValuesChange} form={form} labelCol={{ span: 5 }}>
         <Alert message={`当前对象: ${nodeType(nodeRef.current)}`} />
         <Collapse
-            expandIconPosition="end"
-            items={collapseItems()}
-            defaultActiveKey={['base', 'special', 'description', 'action']}
-            />
+            style={{
+                height: `${props.height}vh`,
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                scrollbarWidth: 'thin',
+                marginTop: '1px'
+            }} expandIconPosition="end" items={collapseItems()}
+            defaultActiveKey={['base', 'special', 'description', 'action']}/>
     </Form>
 }
 

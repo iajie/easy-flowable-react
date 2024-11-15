@@ -14,7 +14,7 @@ export default () => {
 
     const locale = useLocale();
     
-    return <EasyFlowable height={70} locale={locale.id}
+    return <EasyFlowable locale={locale.id}
         panel={{
             users,
             groups,

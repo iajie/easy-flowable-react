@@ -87,10 +87,10 @@ export interface PanelProps {
     defaultElement: Element;
     /** 节点前缀 */
     attrPrefix?: string;
-    /** 抽屉样式 */
-    style?: CSSProperties;
-    /** 抽屉宽度  */
-    width?: number;
+    /**
+     * @description 属性栏高度
+     */
+    height: number;
     /** 用户列表 */
     users?: Option[] | (() => Promise<Option[]>);
     /** 候选组列表，可以是角色、部门... */
@@ -167,3 +167,9 @@ export const ActionOptions: { label: string; value: string; disabled?: boolean; 
     { label: '前加签', value: 'BEFORE_SIGN', disabled: true, description: '在当前任务前增加一个人审批，审批完成后才到当前节点执行。' },
     { label: '后加签', value: 'AFTER_SIGN', disabled: true, description: '在当前任务后增加一个人审批，审批完成后需要添加的人审批才会进入流程图节点。' },
 ];
+
+/**
+ * 操作
+ * @description
+ */
+export const ActionType = ActionOptions.map(i => ({ label: i.label, value: i.value, disabled: i.disabled }));

@@ -92,13 +92,24 @@ export interface BpmnProps {
      */
     panelRender?: ((modeler: BpmnModeler) => ReactNode) | false;
     /**
-     * @description 流程key, flowabl部署会用到，一般就是模型key
+     * @description 流程key, flowable部署会用到，一般就是模型key
      */
     flowKey?: string;
     /**
      * @description 流程名称：流程部署后显示的信息
      */
     flowName?: string;
+    /**
+     * @description 设计器加载完成之后的事件
+     * @param modeler 设计器对象
+     */
+    loadAfter: (modeler: BpmnModeler) => void;
+    /**
+     * @description 设计器加载失败的事件
+     * @param modeler 设计器对象
+     * @param err 加载失败信息
+     */
+    loadError: (modeler: BpmnModeler, err: any) => void;
 }
 
 interface SaveProps {

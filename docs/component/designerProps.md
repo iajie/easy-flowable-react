@@ -8,6 +8,10 @@ nav:
 ## EasyFlowable
 > `EasyFlowable`是基于 `Ant Design` + `bpmn.js` 而开发的流程设计器组件，提供了更高级别的组合支持，开箱即用。可以显著地提升流程设计整合进度，更加专注于业务。
 
+:::warning
+设计器不推荐暗黑色主题！！！
+:::
+
 ## API
 <Badge type="warning">所有以 Render 为后缀的方法都可以通过传入 false 来使其不渲染。</Badge>
 |            属性名          |               描述               |    类型    |         默认值              |

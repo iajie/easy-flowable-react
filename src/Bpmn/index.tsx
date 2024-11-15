@@ -9,7 +9,7 @@ import "bpmn-js/dist/assets/bpmn-js.css";
 import "bpmn-js/dist/assets/diagram-js.css";
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 import "bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css";
-import { ActionOptions } from './props/panel'
+import { ActionType } from './props/panel'
 import { bpmnDefaultStyle, BpmnProps, xmlStr, Element } from "./props";
 import Toolbar from "./components/Toolbar";
 import PropertiesPanel from "./components/PropertiesPanel";
@@ -27,6 +27,7 @@ export default ({ height = 60, locale = 'zh-CN', align = 'default', bpmnStyle = 
     const [modeler, setModeler] = React.useState<BpmnModeler>();
     const [xml, setXml] = React.useState<string | null>(null);
     const [defaultElement, setDefaultElement] = React.useState<Element>();
+    const [panelHeight, setPanelHeight] = React.useState(height);
 
     React.useEffect(() => {
         if (!!xml && containerRef.current) {
@@ -67,9 +68,14 @@ export default ({ height = 60, locale = 'zh-CN', align = 'default', bpmnStyle = 
             });
             // 装载xml
             bpmn.importXML(xml).then(() => {
-                console.log("import xml success!")
-            }).catch((err) => console.log("import xml error: ", err))
-
+                if (props.loadAfter) {
+                    props.loadAfter(bpmn);
+                }
+            }).catch((err) => {
+                if (props.loadError) {
+                    props.loadError(bpmn, err);
+                }
+            })
             setModeler(bpmn);
             // 及时销毁画布
             return () => bpmn && bpmn.destroy();
@@ -106,19 +112,19 @@ export default ({ height = 60, locale = 'zh-CN', align = 'default', bpmnStyle = 
     }, []);
 
     return <ConfigProvider locale={locale == 'zh-CN' ? zhCN : enCN} theme={{ algorithm: theme.defaultAlgorithm }}>
-        <Splitter style={{ width: "100%" }}>
-            <Splitter.Panel defaultSize="70%" min="50%">
+        <Splitter onResize={(sizes) => setPanelHeight(sizes[1] <= 0 ? 0 : height)}>
+            <Splitter.Panel min={450}>
                 {(modeler && props.toolbarRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
                     <Toolbar {...props.toolbar} modeler={modeler} uploadXml={(xml) => setXml(xml)} />)}
                 <div id="container" ref={containerRef} style={{ ...bpmnDefaultStyle, ...bpmnStyle }} />
             </Splitter.Panel>
-            <Splitter.Panel collapsible defaultSize="30%" min="20%">
+            <Splitter.Panel collapsible defaultSize={446}>
                 {(modeler && defaultElement && props.panelRender !== false) && ((props.panelRender && props.panelRender(modeler)) ||
-                    <PropertiesPanel {...props.panel} modeler={modeler} defaultElement={defaultElement} />)}
+                    <PropertiesPanel {...props.panel} height={panelHeight} modeler={modeler} defaultElement={defaultElement} />)}
             </Splitter.Panel>
         </Splitter>
     </ConfigProvider>
 }
 export type {
-    ActionOptions
+    ActionType
 }

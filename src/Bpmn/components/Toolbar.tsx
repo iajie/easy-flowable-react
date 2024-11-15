@@ -4,17 +4,9 @@
  * @Author: MoJie
  */
 import {
-    DownloadOutlined,
-    EyeOutlined,
-    ImportOutlined,
-    KeyOutlined,
-    RedoOutlined,
-    ReloadOutlined,
-    SaveOutlined,
-    ZoomInOutlined,
-    ZoomOutOutlined,
+    DownloadOutlined, EyeOutlined, ImportOutlined, KeyOutlined, RedoOutlined,
+    ReloadOutlined, SaveOutlined, ZoomInOutlined, ZoomOutOutlined,
 } from '@ant-design/icons';
-import { Button, Dropdown, MenuProps, Modal, Popover, Space, Typography, Upload } from 'antd';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
@@ -22,8 +14,9 @@ import 'prismjs/components/prism-jsx';
 import 'prismjs/components/prism-markup';
 import React from 'react';
 import Editor from 'react-simple-code-editor';
-import { downloadSvg, toolbarDefaultStyle, ToolbarProps } from '../props';
 import { useSaveHotKeyFunction } from './Hooks';
+import { downloadSvg, toolbarDefaultStyle, ToolbarProps } from '../props';
+import { Button, Dropdown, MenuProps, Modal, Popover, Space, Typography, Upload } from 'antd';
 
 const { Paragraph } = Typography;
 
