@@ -9,7 +9,17 @@ import {
 } from "antd";
 import React, { Fragment } from "react";
 import { userType, defaultType, defaultUser, Option, MultiInstancesProperties, serviceType, scriptType } from "../props/userTask";
-import { PanelProps, Element, BusinessObjectType, nodeType, multiInstancesType, elValid, elCheck, ActionOptions } from "../props/panel";
+import {
+    PanelProps,
+    Element,
+    BusinessObjectType,
+    nodeType,
+    multiInstancesType,
+    elValid,
+    elCheck,
+    ActionOptions,
+    elValidAndNumber
+} from "../props/panel";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
@@ -131,9 +141,6 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
 				if (nodeType(e.element.businessObject) == "SequenceFlow") {
 					return;
 				}
-                if (nodeType(e.element.businessObject) !== 'UserTask') {
-                    delete e.element.businessObject.loopCharacteristics;
-                }
                 changeCurrentElement(e.element);
 			}
 		}
@@ -146,11 +153,11 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
 	}, [modeler]);
 
 	const onValuesChange = (changeValue: Partial<BusinessObjectType> | any) => {
+        const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
         const completionCondition = changeValue.loopCharacteristics?.completionCondition?.body;
-		if (changeValue.id || changeValue.name || changeValue.scriptFormat) {
+		if (changeValue.id || changeValue.name || changeValue.scriptFormat || changeValue.documentation) {
 			updateElementProperty({ ...changeValue });
 		} else if (changeValue.conditionExpression?.body && elCheck(changeValue.conditionExpression?.body)) {
-            const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
             const expression = bpmnFactory.create("bpmn:FormalExpression")
             expression.body = changeValue.conditionExpression?.body;
             updateElementProperty({"conditionExpression": expression});
@@ -160,20 +167,31 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
                 if (changeValue.loopCharacteristics?.collection) {
                     loopCharacteristics.$attrs[`${attrPrefix}collection`] = changeValue.loopCharacteristics.collection;
                     if (!changeValue.loopCharacteristics?.elementVariable) {
+                        const assignee = '${item}';
+                        form.setFieldValue('assignee', assignee);
+                        form.setFieldValue('loopCharacteristics.elementVariable', 'item');
+                        updateElementProperty({ [attrPrefix + "assignee"]: assignee });
                         loopCharacteristics.$attrs[`${attrPrefix}elementVariable`] = 'item';
                     }
                 } else if (changeValue.loopCharacteristics?.elementVariable) {
+                    const assignee = '${' + changeValue.loopCharacteristics?.elementVariable + '}';
+                    form.setFieldValue('assignee', assignee);
+                    updateElementProperty({ [attrPrefix + "assignee"]: assignee });
                     loopCharacteristics.$attrs[`${attrPrefix}elementVariable`] = changeValue.loopCharacteristics?.elementVariable;
-                } else if (!changeValue.loopCharacteristics?.loopMaximun) {
-                    loopCharacteristics.$attrs[`${attrPrefix}loopMaximun`] = changeValue.loopCharacteristics.loopMaximun;
+                } else if (changeValue.loopCharacteristics?.loopCardinality) {
+                    const expression = bpmnFactory.create("bpmn:Expression");
+                    expression.body = changeValue.loopCharacteristics?.loopCardinality;
+                    expression.$parent = loopCharacteristics;
+                    loopCharacteristics.loopCardinality = expression;
                 } else if (completionCondition && elCheck(completionCondition)) {
-                    const bpmnFactory: BpmnFactory = modeler.get("bpmnFactory");
                     const expression = bpmnFactory.create("bpmn:Expression");
                     expression.body = completionCondition;
                     expression.$parent = loopCharacteristics;
                     loopCharacteristics.completionCondition = expression;
                 }
                 updateElementProperty({ "loopCharacteristics": loopCharacteristics });
+            } else {
+                updateElementProperty({ "loopCharacteristics": null });
             }
         } else {
             const keys = ['expression', 'delegateExpression'];
@@ -301,6 +319,16 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
         } else if (nodeType(nodeRef.current) == 'UserTask' && multiInstances.show) {
             children.children = <Fragment>
                 <Form.Item><Alert message={`实例类型：${multiInstances.text}`} /></Form.Item>
+                <Form.Item label="分配用户" name="assignee">
+                    <Input readOnly/>
+                </Form.Item>
+                <Form.Item
+                    label="基数"
+                    name={['loopCharacteristics', 'loopCardinality']}
+                    rules={[{ validator: (_, value) => elValidAndNumber(value) }]}
+                    tooltip="多实例的数量计算，注意如果使用el表达式结果也需要为整数。">
+                    <Input />
+                </Form.Item>
                 <Form.Item label="集合" name={['loopCharacteristics', 'collection']} tooltip="此处集合为执行人列表，需要在流程启用或运行时设置流程变量。">
                     <Input />
                 </Form.Item>
@@ -411,7 +439,7 @@ const PropertiesPanel: React.FC<PanelProps> = ({ modeler, defaultElement, attrPr
         arr.push({
             key: 'description',
             label: '文档',
-            children: <Form.Item label="描述" name="description">
+            children: <Form.Item label="描述" name="documentation">
                 <TextArea />
             </Form.Item>
         })

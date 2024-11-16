@@ -12,6 +12,7 @@ export type BusinessObjectType = {
     id: string,
     name: string,
     description: string;
+    documentation: string;
     /**
      * @description 作者
      */
@@ -30,7 +31,10 @@ export type BusinessObjectType = {
         }
         /** true:串行, false:并行 */
         isSequential: boolean,
-        loopMaximun: any,
+        /**
+         * @description 循环基数
+         */
+        loopCardinality: number,
         collection: any,
         elementVariable: any,
         completionCondition: {
@@ -146,6 +150,25 @@ export const elValid = async (value?: string) => {
         return Promise.resolve();
     }
     return Promise.reject(new Error('EL条件表达式错误'));
+}
+
+/**
+ * SpEl参数校验
+ * @param value 校验
+ */
+export const elValidAndNumber = async (value?: string) => {
+    if (!value) {
+        return Promise.resolve();
+    }
+    if (value) {
+        if (/^\+?[1-9][0-9]*$/.test(value)) {
+            return Promise.resolve();
+        }
+        if (value.startsWith('${') && value.endsWith('}')) {
+            return Promise.resolve();
+        }
+    }
+    return Promise.reject(new Error('请填写数字或EL条件表达式'));
 }
 
 /**

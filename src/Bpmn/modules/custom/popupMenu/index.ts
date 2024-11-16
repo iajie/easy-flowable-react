@@ -4,26 +4,16 @@
  * @Description: 自定义修改工具菜单栏
  * @Author: MoJie
  */
-import { getBusinessObject, is, ModdleElement } from 'bpmn-js/lib/util/ModelUtil';
-import { isEventSubProcess, isExpanded } from 'bpmn-js/lib/util/DiUtil';
-import { isDifferentType } from 'bpmn-js/lib/features/popup-menu/util/TypeUtil';
-import * as replaceOptions from 'bpmn-js/lib/features/replace/ReplaceOptions';
-import { canBeNonInterrupting, getInterruptingProperty } from 'bpmn-js/lib/features/modeling/behavior/util/NonInterruptingUtil';
-import Icons from 'bpmn-js/lib/features/popup-menu/util/Icons';
-import ReplaceMenuProvider, { BpmnFactory, BpmnReplace, Moddle, ModdleCopy, Modeling, PopupMenu, PopupMenuEntryAction, ReplaceOption, Rules, Translate, Element } from 'bpmn-js/lib/features/popup-menu/ReplaceMenuProvider';
+import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil';
+import ReplaceMenuProvider, {
+    BpmnFactory, BpmnReplace, Moddle, ModdleCopy, Modeling, PopupMenu,
+    PopupMenuEntryAction, Rules, Translate, Element, ReplaceOption
+} from 'bpmn-js/lib/features/popup-menu/ReplaceMenuProvider';
+import { isDifferentType } from "bpmn-js/lib/features/popup-menu/util/TypeUtil";
+import * as replaceOptions from "bpmn-js/lib/features/replace/ReplaceOptions";
+import { isEventSubProcess, isExpanded } from "bpmn-js/lib/util/DiUtil";
 
 class EasyFlowablePopupMenuProvider extends ReplaceMenuProvider {
-
-    static $inject: string[] = [
-        'bpmnFactory',
-        'popupMenu',
-        'modeling',
-        'moddle',
-        'bpmnReplace',
-        'rules',
-        'translate',
-        'moddleCopy'
-    ];
 
     popupMenu: PopupMenu;
     bpmnFactory: BpmnFactory;
@@ -54,8 +44,11 @@ class EasyFlowablePopupMenuProvider extends ReplaceMenuProvider {
     _getLoopCharacteristicsHeaderEntries = (target: Element) => {
         // 只有用户任务支持多实例
         if (target.type !== 'bpmn:UserTask') {
+            // 如果不是用户任务，则删除多实例元素图标
+            this.modeling.updateProperties(target, { loopCharacteristics: undefined });
             return {};
         }
+        // 多实例图标点击事件
         const toggleLoopEntry = (event: any, entry: Element) => {
             // remove
             if (entry.active) {

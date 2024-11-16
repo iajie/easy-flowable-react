@@ -23,6 +23,7 @@ $ npm install easy-flowable-react
 
 ## 流程设计器
 <img src="https://gitee.com/iajie/easy-flowable-react/raw/master/public/designer.png" alt="流程设计器"></img>
+
 ```tsx
 import { EasyFlowable } from 'easy-flowable-react';
 
@@ -39,6 +40,7 @@ export default () => {
 ```
 ## 流程图
 <img src="https://gitee.com/iajie/easy-flowable-react/raw/master/public/viewer.png" alt="流程图"/>
+
 ```tsx
 import { EasyFlowableViewer } from 'easy-flowable-react';
 
