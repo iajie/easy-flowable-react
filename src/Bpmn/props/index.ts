@@ -103,13 +103,13 @@ export interface BpmnProps {
      * @description 设计器加载完成之后的事件
      * @param modeler 设计器对象
      */
-    loadAfter: (modeler: BpmnModeler) => void;
+    loadAfter?: (modeler: BpmnModeler) => void;
     /**
      * @description 设计器加载失败的事件
      * @param modeler 设计器对象
      * @param err 加载失败信息
      */
-    loadError: (modeler: BpmnModeler, err: any) => void;
+    loadError?: (modeler: BpmnModeler, err: any) => void;
 }
 
 interface SaveProps {
