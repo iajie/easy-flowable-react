@@ -23,10 +23,6 @@ import {
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import Editor from "react-simple-code-editor";
 import Prism from "prismjs";
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-markup';
-import 'prismjs/components/prism-jsx';
 import { ItemType } from "rc-collapse/es/interface";
 type EventBus = import('diagram-js/lib/core/EventBus').default;
 type Modeling = import('bpmn-js/lib/features/modeling/Modeling').default;

@@ -4,5 +4,5 @@
  * @Author: MoJie
  */
 export { default as EasyFlowable } from './Bpmn';
-export type { ActionType } from './Bpmn';
+export { ActionType } from './Bpmn/props/panel';
 export { default as EasyFlowableViewer } from './Viewer';

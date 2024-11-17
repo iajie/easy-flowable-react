@@ -8,10 +8,6 @@ import {
     ReloadOutlined, SaveOutlined, ZoomInOutlined, ZoomOutOutlined,
 } from '@ant-design/icons';
 import Prism from 'prismjs';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-markup';
 import React from 'react';
 import Editor from 'react-simple-code-editor';
 import { useSaveHotKeyFunction } from './Hooks';
