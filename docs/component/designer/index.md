@@ -18,7 +18,8 @@ export default () => {
         panel={{
             users,
             groups,
-        }}
+        }} flowKey="sefw322" flowName="12323"
+        request={async () => null}                 
         toolbar={{
             save: async (data) => {
                 console.log(data);

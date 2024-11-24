@@ -23,7 +23,7 @@ export default defineConfig({
 		// 主题
 		prefersColor: { default: 'light', switch: false },
 		// 项目名称
-		logo: '/logo2.png',
+		logo: '/logo.png',
 		footer: 'Copyright © 2024 Easy-Flowable <a target="_blank" href="https://beian.miit.gov.cn">黔ICP备2022008298号</a>'
 	},
 });
