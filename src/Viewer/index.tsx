@@ -1,18 +1,12 @@
-import React from "react";
+import React, { Fragment } from "react";
 import './index.less';
 import { Descriptions, Popover, Spin, Tag } from "antd";
 import BpmnModeler from "bpmn-js/lib/Modeler";
 type Element = import('bpmn-js/lib/model/Types').Element;
 import Modeling from "bpmn-js/lib/features/modeling/Modeling";
 import {
-    Color,
-    defaultXml,
-    EasyFlowableViewer,
-    NodeColor,
-    NodeType,
-    PopoverProps,
-    PopoverContent,
-    formatDate
+    Color, defaultXml, EasyFlowableViewer, NodeColor, NodeType,
+    PopoverProps, PopoverContent, formatDate
 } from "./props";
 import { Canvas, EventBus } from "bpmn-js/lib/features/context-pad/ContextPadProvider";
 import { ElementRegistry } from "bpmn-js/lib/features/auto-place/BpmnAutoPlaceUtil";
@@ -210,7 +204,8 @@ export default ({ height = 50, mode = 'read', ...props }: EasyFlowableViewer) =>
         }
     }, []);
 
-    return <div id="easy-flowable-viewer" ref={containerRef}>
+    return <Fragment>
+        <div id="easy-flowable-viewer" ref={containerRef}/>
         <Popover placement="top" title={popoverInfo.title || popover.title} content={<Spin spinning={loading}>
             {(node && props.tipRender && props.tipRender(node.id, node?.type, node)) || <Descriptions style={{ maxWidth: '15vw' }} column={1}>
                 <Descriptions.Item label="执行人">{popoverInfo.users}</Descriptions.Item>
@@ -224,12 +219,12 @@ export default ({ height = 50, mode = 'read', ...props }: EasyFlowableViewer) =>
                 width: `${popover.width}px`,
                 height: `${popover.height}px`,
                 display: `${popover.display}`,
-                position: 'absolute',
+                position: 'fixed',
                 zIndex: 1000,
                 top: `${popover.top}px`,
                 left: `${popover.left}px`,
             }}></div>
         </Popover>
-    </div>
+    </Fragment>
 
 }

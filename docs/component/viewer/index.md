@@ -7,7 +7,7 @@ order: 3
 ```tsx
 import React from 'react';
 import { xmlStr } from './index';
-import logo from '/public/logo2.png';
+import logo from '/public/logo.png';
 import { EasyFlowableViewer } from 'easy-flowable-react';
 import { Avatar, Card, Popover, Space, Tag } from "antd";
 
