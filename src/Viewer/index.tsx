@@ -211,7 +211,7 @@ export default ({ height = 50, mode = 'read', ...props }: EasyFlowableViewer) =>
                 <Descriptions.Item label="执行人">{popoverInfo.users}</Descriptions.Item>
                 <Descriptions.Item label="节点状态">{popoverInfo.status || popover.status}</Descriptions.Item>
                 <Descriptions.Item label="耗时">{popover.noting ? durationRender(popoverInfo.duration) : '-'}</Descriptions.Item>
-                <Descriptions.Item label="开始时间">{popover.noting ? formatDate(popoverInfo.startTime) : '-'}</Descriptions.Item>
+                <Descriptions.Item label="开始时间">{(popover.noting || popoverInfo.startTime) ? formatDate(popoverInfo.startTime) : '-'}</Descriptions.Item>
                 <Descriptions.Item label="结束时间">{popover.noting ? formatDate(popoverInfo.endTime) : '-'}</Descriptions.Item>
             </Descriptions>}
         </Spin>}>
