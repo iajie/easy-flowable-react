@@ -1,8 +1,8 @@
 ---
-title: '设计器配置'
-nav:
-  title: 前端组件
-  order: 2
+title: '设计器属性'
+group: '属性'
+token:
+    contentMaxWidth: 1280
 ---
 
 ## EasyFlowable

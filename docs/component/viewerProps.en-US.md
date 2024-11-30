@@ -1,9 +1,9 @@
 ---
-title: 'Viewer'
+title: 'Viewer Props'
 order: 2
-nav:
-  title: Components
-  order: 2
+group: 'Props'
+token:
+    contentMaxWidth: 1280
 ---
 
 ## EasyFlowableViewer Components

@@ -11,7 +11,7 @@ features:
     emoji: 🎆
     description: Encapsulation based on Flowable, simple to use, simplified configuration
   - title: Easy-Flowable Front end components
-    emoji: 🐦‍🔥
+    emoji: 🐦‍
     description: Support front-end and back-end separation custom building, canvas component, secondary encapsulation based on BpmnJs, simple configuration with diversified functions
   - title: 'Ant Design'
     emoji: 🚀

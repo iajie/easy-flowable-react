@@ -5,7 +5,6 @@
  */
 import BpmnModeler from "bpmn-js/lib/Modeler";
 import { Color } from "antd/es/color-picker";
-import React, { CSSProperties } from "react";
 import { Option } from './index';
 
 export type BusinessObjectType = {

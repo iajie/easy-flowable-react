@@ -1,9 +1,10 @@
 ---
-title: 'Designer'
-nav:
-  title: Components
-  order: 2
+title: 'Designer Props'
+group: 'Props'
+token:
+    contentMaxWidth: 1280
 ---
+
 
 ## EasyFlowable
 > `EasyFlowable`It is based on `Ant Design` + `bpmn.js` The developed process designer 

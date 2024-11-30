@@ -1,12 +1,12 @@
 ---
-title: '流程图配置'
+title: '流程图属性'
+group: '属性'
 order: 2
-nav:
-  title: 前端组件
-  order: 2
+token:
+    contentMaxWidth: 1280
 ---
 
-## EasyFlowableViewer 流程图组件
+## EasyFlowableViewer 流程图组件(流程动态)
 > `EasyFlowableViewer`是基于 `Ant Design` + `bpmn.js` 而开发的流程图预览组件。
 
 ## API

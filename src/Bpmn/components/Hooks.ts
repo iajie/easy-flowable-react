@@ -7,7 +7,7 @@ import { MutableRefObject, useEffect, useRef } from "react";
 
 /**
  * 绑定保存hook
- * @param func 
+ * @param func
  */
 export function useSaveHotKeyFunction(func: () => void) {
     const commandKeyDown: MutableRefObject<boolean> = useRef(false);
