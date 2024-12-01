@@ -7,7 +7,7 @@ export default () => {
 
     const locale = useLocale();
 
-    return <EasyFlowable
+    return <EasyFlowable height={70}
         locale={ locale.id as 'zh-CN' | 'en-CN' }
         panel={{ users, groups, }}
         flowKey="sefw322"

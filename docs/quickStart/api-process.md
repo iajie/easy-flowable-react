@@ -127,30 +127,12 @@ flowable本身接口仍然可以使用，正常注入即可使用原生API
 | meTodo  | 我的待办 | `long`    |
 | meDone  | 我的已办 | `long`    |
 
-## 11、待办分页查询
-`todoTasksByUser(userId, current, size)`
-- userId：用户id，全部待办不查询
+## 11、待办/已办 分页查询
+`todoTasks(current, size, param)`
 - current：页码
 - size：页数大小
-
-| 属性名               | 描述                 | 类型            |
-|-------------------|--------------------|---------------|
-| id                | 办理历史ID             | `String`      |
-| status            | 流程状态：0进行中。1完成，2已作废 | `Integer`     |
-| processName       | 流程名称               | `String`      |
-| nodeName          | 节点名称               | `String`      |
-| startTime         | 任务开始时间             | `Date`        |
-| assignee          | 代办人                | `String`      |
-| startUserId       | 任务发起人              | `String`      |
-| taskId            | 任务ID               | `String`      |
-| processInstanceId | 流程实例ID             | `String`      |
-| comments          | 流程审批意见             | [comments](#流程审批意见) |
-
-## 12、已办分页查询
-`doneTasksByUser(userId, current, size)`
-- userId：用户id，全部待办不查询
-- current：页码
-- size：页数大小
+- param.userId：用户id
+- param.type：[查询参数](#10、流程统计数)
 
 | 属性名               | 描述                 | 类型            |
 |-------------------|--------------------|---------------|
